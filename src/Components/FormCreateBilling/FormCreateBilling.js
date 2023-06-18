@@ -1,283 +1,190 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  InputLabel,
-  Select,
-  MenuItem,
-  FormControl,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Tooltip,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  Switch,
-  FormGroup,
-  Zoom
-} from "@mui/material";
-import { useTheme } from "@emotion/react";
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { useState, useEffect, useContext } from "react";
 
-import {formatToCPFOrCNPJ, isCPFOrCNPJ, formatToPhone, isPhone, parseToNumber } from 'brazilian-values'
+import { useForm } from 'react-hook-form';
+import axios from 'axios'
+import { TextField, Button, Box, Typography, InputLabel, MenuItem, FormControl, Select, Card, CardContent, FormControlLabel, Checkbox, Divider } from '@mui/material'
+import {formatToCPFOrCNPJ, isCPFOrCNPJ, formatToPhone, isPhone } from 'brazilian-values'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const FormCreateBilling = () => {
-  const theme = useTheme();
-  const [tipoPessoa, setTipoPessoa] = useState("PESSOA_FISICA");
-  const [linhaDigitavel, setLinhaDigitavel] = useState("");
-  const [openModal, setOpenModal] = useState(false);
-  const [dadosFormulario, setDadosFormulario] = useState({
-    name: "",
-    cpf: "",
-    rg: "",
-    periodo: "",
-    amount: "",
-    dueDate: "",
-    tipoPessoa: "",
-    vencimento_parcelas: "",
-  });
-  const [formattedCpf, setFormattedCpf] = useState("");
-  const [correioMarcado, setCorreioMarcado] = useState(false);
-  const [pagamentoRecorrenteMarcado, setPagamentoRecorrenteMarcado] = useState(false);
-
-  const handleSetDados = (event) => {
-    setDadosFormulario({
-      ...dadosFormulario,
-      [event.target.name]: event.target.value,
-    });
-    console.log(event.target.id+" : "+event.target.value);
-  };
-
-  const handleChangeTipoPessoa = (event) => {
-    setTipoPessoa(event.target.value);
-  };
-
-  const handleGerarBoleto = () => {
-    console.log("Form...:",dadosFormulario);
-    if (dadosFormulario.name !== "") {
-      const amountFormatted = parseToNumber(dadosFormulario.amount);
-      axios
-        .post(`${process.env.REACT_APP_URL}/cobrar.php?type=1`, {
-          name: dadosFormulario.name,
-          cpf: (dadosFormulario.cpf).replace(/[./]/g, "").replace(/[-]/g, "").trim(),
-          rg: dadosFormulario.rg,
-          amount: amountFormatted,
-          dueDate: dadosFormulario.dueDate,
-          tipoPessoa: tipoPessoa,
-        })
-        .then(
-          (response) => {
-            console.log(response.data);
-            if (response.data.linhaDigitavel) {
-              setLinhaDigitavel(response.data.linhaDigitavel);
-              setOpenModal(true);
-            } else {
-              alert("Erro ao gerar boleto: " + response.data.message);
-            }
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-    }
-  };
-
-  const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(linhaDigitavel);
-    window.location.reload();
-  };
-
-  const handlePrintBoleto = () => {
-    window.open(
-      `${process.env.REACT_APP_URL}/impressao.php?linhaDigitavel=${linhaDigitavel}`,
-      "_blank"
-    );
-    window.location.reload();
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    window.location.reload();
-  };
-
-  const handleCpfChange = (event) => {
-    setDadosFormulario({
-      ...dadosFormulario,
-      [event.target.name]: event.target.value,
-    });
-    const { value } = event.target;
-    const formattedValue = formatToCPFOrCNPJ(value);
-    setFormattedCpf(formattedValue);
+const FormCobranca = () => {
+    const [cpf, setCpf] = useState('');
+    const [phone, setPhone] = useState('');
+    const [mobile, setMobile] = useState('');
+    const [isCpfOrCnpj, setIsCpfOrCnpj] = useState(false);
+    const [formData, setFormData] = useState({
+        nome: '',
+        cpfValid: false,
+        cpf: '',
+        email: '',
+        phone: '',
+        mobile: '',
+        valor: '',
+        forma_pagamento: '',
+        acceptTerms: false,
+      });
     
 
+      const handleCpfChange = (event) => {
+        const cpfInput = event.target.value;
+        setCpf(cpfInput);
+        const cpfValid = isCPFOrCNPJ(cpfInput)
+        setFormData((prevData) => ({ ...prevData, cpfValid, cpf: cpfInput }));
+        if (cpfValid) fetchAsaasData(cpfInput);
+    };  
+    const formattedCpf = formatToCPFOrCNPJ(cpf);   
+
+    const handlePhoneChange = (event) => {
+      const phoneInput = event.target.value;
+      setPhone(phoneInput);
+      setFormData((prevData) => ({ ...prevData, phone: phoneInput }));
   };
 
-  console.log(isCPFOrCNPJ(dadosFormulario.cpf))
+    const formattedPhone = formatToPhone(phone);
 
-  const handleCorreioChange = (event) => {
-    setCorreioMarcado(event.target.checked);    
+    const handleMobileChange = (event) => {
+      const mobileInput = event.target.value;
+      setMobile(mobileInput);
+      setFormData((prevData) => ({ ...prevData, mobile: mobileInput }));
   };
 
-  const handlePagamentoRecorrenteChange = (event) => {
-    setPagamentoRecorrenteMarcado(event.target.checked);
-  };
+    const handleFormatCurrency = (event) => {
+        var valor = event.target.value.replace(/\D/g,"");
+        valor = (valor/100).toFixed(2) + "";
+        setFormData({...formData, valor: valor})
+        valor = valor.replace(".", ",");
+        valor = valor.replace(/(\d)(\d{3})(\d{3}),/g, "$1.$2.$3,");
+        valor = valor.replace(/(\d)(\d{3}),/g, "$1.$2,");
+        event.target.value = valor === "0,00" ? "" : "R$ "+valor;
+        
+    }
 
-  return (
-    <>
-      <Box
-        sx={{
-          bgColor: theme.palette.background.default,
-          width: { xs: "100%", sm: "100%", md: "50%" },
-          display: "flex",
-          flexDirection: "column",
-          gap: "15px",
-          margin: "0 auto",
-          paddingTop: 3,
-        }}
-      >
-        <Typography variant="h4" align="center" sx={{ marginBottom: 3 }}>
-          Gerar Boleto
-        </Typography>
-        <TextField
-          onChange={handleSetDados}
-          name="name"
-          label="Nome"
-          variant="outlined"
-        />
-        <TextField
-          // onChange={handleSetDados}
-          name="cpf"
-          label="CPF"
-          variant="outlined"
-          value={formattedCpf}
-          required
-          onChange={handleCpfChange}
-        />
-        <TextField
-          onChange={handleSetDados}
-          name="rg"
-          label="RG"
-          variant="outlined"
-        />
-        <TextField
-          onChange={handleSetDados}
-          name="amount"
-          label="Valor"
-          variant="outlined"
-        />
-        <TextField
-          onChange={handleSetDados}
-          type="date"
-          name="dueDate"
-          label="Vencimento"
-          variant="outlined"
-          InputLabelProps={{ shrink: true }}
-        />
-        {/* <FormControl component="fieldset" fullWidth>
-          <FormLabel component="legend">Tipo de Pessoa</FormLabel>
-          <RadioGroup
-            aria-label="Tipo de Pessoa"
-            name="tipoPessoa"
-            value={tipoPessoa}
-            onChange={handleChangeTipoPessoa}
-            sx={{ display: "flex", flexDirection: "row" }}
-          >
-            <FormControlLabel
-              value="PESSOA_FISICA"
-              control={<Radio />}
-              label="Pessoa Física"
-            />
-            <FormControlLabel
-              value="PESSOA_JURIDICA"
-              control={<Radio />}
-              label="Pessoa Jurídica"
-            />
-          </RadioGroup>
-        </FormControl> */}
-        <FormGroup row>
-          {/* <FormControlLabel control={<Switch checked={correioMarcado} onChange={handleCorreioChange} />} label="Correio" /> */}
-          <FormControlLabel control={<Switch checked={pagamentoRecorrenteMarcado} onChange={handlePagamentoRecorrenteChange} />} label="Pagamento Recorrente" />
-        </FormGroup>
-        {/* {correioMarcado && (
-          <Zoom in={correioMarcado} timeout={500} unmountOnExit>       
-            <Box sx={{display: 'flex', flexWrap: 'wrap', gap: '15px'}}>
-              <Typography sx={{width: '100%'}} variant="h6">Endereço</Typography>
-              <TextField sx={{width: {xs: '100%', sm: '48%'}}} onChange={handleSetDados} name="cep" label="CEP" />
-              <TextField sx={{width: {xs: '100%', sm: '48%'}}} onChange={handleSetDados} name="logradouro" label="Logradouro" />
-              <TextField sx={{width: {xs: '100%', sm: '48%'}}} onChange={handleSetDados} name="numero" label="Número" />
-              <TextField sx={{width: {xs: '100%', sm: '48%'}}} onChange={handleSetDados} name="complemento" label="Complemento" />
-              <TextField sx={{width: {xs: '100%', sm: '48%'}}} onChange={handleSetDados} name="bairro" label="Bairro" />
-              <TextField sx={{width: {xs: '100%', sm: '48%'}}} onChange={handleSetDados} name="cidade" label="Cidade" />
-              <TextField sx={{width: {xs: '100%', sm: '48%'}}} onChange={handleSetDados} name="estado" label="Estado" />          
+    const formattedMobile = formatToPhone(mobile);
+
+    const { register, handleSubmit } = useForm()
+
+    const onSubmit = (data) => {
+        data.billingType = formData.forma_pagamento
+        data.value = formData.valor
+        const currentDate = new Date();
+        currentDate.setDate(currentDate.getDate() + 2);
+        const dueDate = currentDate.toISOString().split('T')[0];
+        data.dueDate = dueDate;
+        axios.post(`${process.env.REACT_APP_URL_ASAAS}p=1`, data)
+        .then((res)=>{
+            console.log("Retorno: ", res)
+            if(res.data.errors){
+                res.data.errors.forEach((error)=>{
+                    console.log("Error: ", error.description)
+                })
+            }else if(res.data.invoiceUrl){
+                console.log("URL: ", res.data.invoiceUrl)
+                toast.success('Cobrança criada com sucesso!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    onClose: () => {
+                 
+                    }
+                    });
+               
+                window.open(res.data.invoiceUrl, '_blank');
+            }          
+       
+        })
+    }
+
+
+    const handleFieldChange = (e) => {
+      const { name, value } = e.target;
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+      
+      const handleValidateForm = () => {
+        const { nome, valor, cpfValid, forma_pagamento, acceptTerms } = formData;
+        const isValid = nome !== '' && cpfValid === true && valor >= 5.00 && forma_pagamento !== '' && acceptTerms;
+        return isValid;
+    };
+
+      useEffect(() => {
+        handleValidateForm();
+        }, [formData]);
+
+        const fetchAsaasData = async (cpfOrCnpj) => {
+          // Substitua "https://sua-api.com/search" pelo endereço da sua API
+          const cpfCleaner = cpfOrCnpj.replace(/[^\d]+/g, '');
+          const response = await axios.post(`${process.env.REACT_APP_URL}/asaas.php?param=27`, { cpf: cpfCleaner })
+          const data = response.data.data[0];
+      
+          console.log("Data: ", data)
+      
+          if (data) {
+              setFormData((prevData) => ({ 
+                  ...prevData,
+                  nome: data.name,
+                  email: data.email,
+                  phone: data.phone,
+                  mobile: data.mobilePhone,
+              }));
+          }
+      }; 
+
+    return(
+        <Box sx={{display: 'flex', justifyContent: 'center'}}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <Typography sx={{textAlign: 'center'}} variant='h5'>CRIAR COBRANÇA</Typography>
+            <Box sx={{display: 'flex', justifyContent: 'center', flexWrap: 'wrap', width: {xs: '100%'}, height: {xs: '100%'}, maxWidth: '900px', marginBottom: '20px'}}>
+              <Box sx={{width: {xs: '100%'}, minWidth: '350px'}}>
+              <Box sx={{gap:'20px', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', margin: '30px 0'}}>
+                    <TextField sx={{width: {xs: '100%', sm: '100%', md: '100%', lg: '100%', xl: '100%'}}} {...register('nome')} onChange={handleFieldChange} name='nome' label='Nome Completo' required value={formData.nome} InputLabelProps={{ shrink: true }} />
+                    <TextField sx={{width: {xs: '100%', sm: '100%', md: '47%', lg: '48%', xl: '48%'}}} {...register('cpf')} name='cpf' label='CPF ou CNPJ' value={formattedCpf} required onChange={handleCpfChange} InputLabelProps={{ shrink: true }} />
+                    <TextField sx={{width: {xs: '100%', sm: '100%', md: '47%', lg: '48%', xl: '48%'}}} {...register('email')} name='email' label='E-mail' onChange={handleFieldChange} value={formData.email} InputLabelProps={{ shrink: true }} />
+                    <TextField sx={{width: {xs: '100%', sm: '100%', md: '47%', lg: '48%', xl: '48%'}}} {...register('phone')} name='phone' label='Telefone'  onChange={handlePhoneChange} value={formData.phone} InputLabelProps={{ shrink: true }} />
+                    <TextField sx={{width: {xs: '100%', sm: '100%', md: '47%', lg: '48%', xl: '48%'}}} {...register('mobile')} name='mobile' label='Celular' onChange={handleMobileChange} value={formData.mobile} InputLabelProps={{ shrink: true }}  />
+                    <TextField sx={{width: {xs: '100%', sm: '100%', md: '47%', lg: '48%', xl: '48%'}}} {...register('valor')} onChange={handleFieldChange} onKeyUp={(event)=>handleFormatCurrency(event)} name='valor' label='Valor (mínimo R$5,00)' required />                                 
+
+                    <FormControl sx={{width: {xs: '100%', sm: '100%', md: '47%', lg: '48%', xl: '48%'}}} required>
+                        <InputLabel id="demo-simple-select-label">Forma de Pagamento</InputLabel>
+                        <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        label="Forma de Pagamento"
+                        {...register('forma_pagamento')}
+                        name='forma_pagamento'
+                        onChange={handleFieldChange}
+                        >
+                        <MenuItem value='BOLETO'>Boleto</MenuItem>
+                        <MenuItem value='CREDIT_CARD'>Cartão de Crédito</MenuItem>
+                        <MenuItem value='PIX'>PIX</MenuItem>
+                        </Select>
+                    </FormControl>              
+                </Box>
             </Box>
-        </Zoom>
-        )} */}
-        {pagamentoRecorrenteMarcado && (
-          <Zoom in={pagamentoRecorrenteMarcado} timeout={500} unmountOnExit>
-            <Box sx={{display: 'flex', flexWrap: 'wrap', gap: '15px'}}>
-              <Typography sx={{width: '100%'}} variant="h6">Pagamento Recorrente</Typography>
-              <TextField sx={{width: {xs: '100%', sm: '48%'}}} onChange={handleSetDados} name="periodo" label="Periodo" />
-              <FormControl sx={{width: {xs: '100%', sm: '48%'}}}>
-                <InputLabel id="vencimento_parcela-label">Vencimento das parcelas</InputLabel>
-                <Select
-                  labelId="vencimento_parcela-label"
-                  label="Vencimento das parcelas"
-                  id="vencimento_parcelas"
-                  name="vencimento_parcelas"                  
-                  onChange={handleSetDados}
-                >
-                  <MenuItem value='5'>Dia 5</MenuItem>
-                  <MenuItem value='10'>Dia 10</MenuItem>
-                  <MenuItem value='15'>Dia 15</MenuItem>
-                </Select>
-              </FormControl>
+           
+            </Box>
+            <Button disabled={!handleValidateForm()} variant="contained" type='submit'>continuar</Button>
 
-              </Box>
-          </Zoom>
-        )}
-
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleGerarBoleto()}
-        >
-          Gerar Boleto
-        </Button>
-      </Box>
-
-      <Dialog open={openModal} onClose={handleCloseModal}>
-        <DialogTitle>Linha Digitável</DialogTitle>
-        <DialogContent>
-          <Typography>{linhaDigitavel}</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCopyToClipboard}>Copiar</Button>
-          <Button onClick={handlePrintBoleto}>Imprimir Boleto</Button>
-          <Button onClick={handleCloseModal}>Fechar</Button>
-        </DialogActions>
-      </Dialog>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
-    </>
-  );
-};
+            {/* <Button variant="contained" onClick={handleTeste}>teste</Button> */}
+        </form>
+        <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+        />
+        </Box>
+    )
+}
 
 
-export default FormCreateBilling;
+export default FormCobranca

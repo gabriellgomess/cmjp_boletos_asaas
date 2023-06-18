@@ -5,9 +5,11 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Routes, Route } from 'react-router-dom';
 
 // Páginas
+import Dashboard from './Pages/Dashboard';
 import FormCadastro from './Pages/FormCadastro';
 import TableBilling from './Pages/TableBilling';
 import FormCadastroLote from './Pages/FormCadastroLote';
+import CobrancasRecorrentes from './Pages/CobrancasRecorrentes';
 
 // Componentes
 import Header from './Components/Header/Header';
@@ -83,9 +85,11 @@ const App = () => {
           /> 
         </Box>           
         <Routes>
-          <Route path={`${process.env.REACT_APP_PATH}`} element={<FormCadastro />} />
-          <Route path={`${process.env.REACT_APP_PATH}/cobranca_lote`} element={<FormCadastroLote />} />
+          <Route path={`${process.env.REACT_APP_PATH}`} element={<Dashboard />} />
+          <Route path={`${process.env.REACT_APP_PATH}/form_cadastro`} element={<FormCadastro />} />
+          {/* <Route path={`${process.env.REACT_APP_PATH}/cobranca_lote`} element={<FormCadastroLote />} /> */}
           <Route path={`${process.env.REACT_APP_PATH}/table`} element={<TableBilling />} />
+          <Route path={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`} element={<CobrancasRecorrentes />} />
         </Routes>        
       </Container>
     </Box>

@@ -300,6 +300,7 @@ const FormCreateBatch = () => {
           </TableHead>
           <TableBody>
             {cobrar.map((row) => {
+              if (row.customerID == null) {
               const valorFormatado = new Intl.NumberFormat("pt-BR", {
                 style: "currency",
                 currency: "BRL",
@@ -373,7 +374,7 @@ const FormCreateBatch = () => {
                     </Tooltip>
                   </TableCell>
                 </TableRow>
-              );
+              )};
             })}
           </TableBody>
         </Table>

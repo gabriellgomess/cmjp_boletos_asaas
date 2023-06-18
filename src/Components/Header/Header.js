@@ -78,11 +78,21 @@ function Header() {
                     sx={{ color: theme.palette.text.primary }}
                     variant="text"
                   >
-                    Cadastrar Boleto
+                    Dashboard
                   </Button>
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
+                <Link to={`${process.env.REACT_APP_PATH}/form_cadastro`}>
+                  <Button
+                    sx={{ color: theme.palette.text.primary }}
+                    variant="text"
+                  >
+                    Cadastrar Boleto
+                  </Button>
+                </Link>
+              </MenuItem>
+              {/* <MenuItem onClick={handleCloseNavMenu}>
                 <Link to={`${process.env.REACT_APP_PATH}/cobranca_lote`}>
                   <Button
                     sx={{ color: theme.palette.text.secondary }}
@@ -91,7 +101,7 @@ function Header() {
                     Gerar Cobranças em Lote
                   </Button>
                 </Link>
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem onClick={handleCloseNavMenu}>
                 <Link to={`${process.env.REACT_APP_PATH}/table`}>
                   <Button
@@ -99,6 +109,16 @@ function Header() {
                     variant="text"
                   >
                     Histórico de boletos
+                  </Button>
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleCloseNavMenu}>
+                <Link to={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`}>
+                  <Button
+                    sx={{ color: theme.palette.text.primary }}
+                    variant="text"
+                  >
+                    Cobranças Recorrentes
                   </Button>
                 </Link>
               </MenuItem>
@@ -113,7 +133,15 @@ function Header() {
           </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <Link to={`${process.env.REACT_APP_PATH}`}>
+          <Link to={`${process.env.REACT_APP_PATH}`}>
+              <Button
+                sx={{ color: theme.palette.text.secondary }}
+                variant="text"
+              >
+                Dashboard
+              </Button>
+            </Link>
+            <Link to={`${process.env.REACT_APP_PATH}/form_cadastro`}>
               <Button
                 sx={{ color: theme.palette.text.secondary }}
                 variant="text"
@@ -121,20 +149,28 @@ function Header() {
                 Cadastrar Boleto
               </Button>
             </Link>
-            <Link to={`${process.env.REACT_APP_PATH}/cobranca_lote`}>
+            {/* <Link to={`${process.env.REACT_APP_PATH}/cobranca_lote`}>
               <Button
                 sx={{ color: theme.palette.text.secondary }}
                 variant="text"
               >
                 Gerar Cobranças em Lote
               </Button>
-            </Link>
+            </Link> */}
             <Link to={`${process.env.REACT_APP_PATH}/table`}>
               <Button
                 sx={{ color: theme.palette.text.secondary }}
                 variant="text"
               >
                 Histórico de boletos
+              </Button>
+            </Link>
+            <Link to={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`}>
+              <Button
+                sx={{ color: theme.palette.text.secondary }}
+                variant="text"
+              >
+                Cobranças Recorrentes
               </Button>
             </Link>
           </Box>

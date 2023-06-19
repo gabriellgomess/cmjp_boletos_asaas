@@ -36,11 +36,11 @@ function Header() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}>
-            <img
+            {/* <img
               width={80}
               src={Logo}
               alt="Logo Casa do Menino Jesus de Praga"
-            />
+            /> */}
           </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -102,7 +102,7 @@ function Header() {
                   </Button>
                 </Link>
               </MenuItem> */}
-              <MenuItem onClick={handleCloseNavMenu}>
+              {/* <MenuItem onClick={handleCloseNavMenu}>
                 <Link to={`${process.env.REACT_APP_PATH}/table`}>
                   <Button
                     sx={{ color: theme.palette.text.primary }}
@@ -121,15 +121,15 @@ function Header() {
                     Cobranças Recorrentes
                   </Button>
                 </Link>
-              </MenuItem>
+              </MenuItem> */}
             </Menu>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>
-            <img
+            {/* <img
               width={80}
               src={Logo}
               alt="Logo Casa do Menino Jesus de Praga"
-            />
+            /> */}
           </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
@@ -157,7 +157,7 @@ function Header() {
                 Gerar Cobranças em Lote
               </Button>
             </Link> */}
-            <Link to={`${process.env.REACT_APP_PATH}/table`}>
+            {/* <Link to={`${process.env.REACT_APP_PATH}/table`}>
               <Button
                 sx={{ color: theme.palette.text.secondary }}
                 variant="text"
@@ -172,7 +172,7 @@ function Header() {
               >
                 Cobranças Recorrentes
               </Button>
-            </Link>
+            </Link> */}
           </Box>
         </Toolbar>
       </Container>

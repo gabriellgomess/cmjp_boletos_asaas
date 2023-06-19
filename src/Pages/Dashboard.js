@@ -9,6 +9,7 @@ const DashBoard = () => {
 
     const [balance, setBalance] = useState([0]);
     const [pending, setPending] = useState([0]);
+    const [paymentLinks, setPaymentLinks] = useState([]);
 
     useEffect(() => {
         axios
@@ -32,14 +33,26 @@ const DashBoard = () => {
         });
     }, []);
 
+    useEffect(() => {
+        axios
+        .get(`${process.env.REACT_APP_URL}/asaas.php?param=28`)
+        .then((response) => {
+            setPaymentLinks(response.data);
+            console.log(response.data);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    }, []);
+
     return (
-        <Box>
+        <Box sx={{display: 'flex', justifyContent: 'center',flexDirection: 'column', alignItems: 'center'}}>
             <Typography variant='h3'>Dashboard</Typography>
             <Box>
-            <Card sx={{width: '300px', marginBottom: '20px'}}>
+            <Card sx={{width: '300px', margin: {xs: '20px auto', sm: '20px 0', md: '20px 0'} }}>
                 <CardContent>
                     <MonetizationOnIcon />                  
-                    <Typography variant="h3" color="text.secondary">
+                    <Typography variant="h3" color="text.success">
                         {balance?.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
                     </Typography>
                     <Typography variant="h5" color="text.secondary">
@@ -47,11 +60,11 @@ const DashBoard = () => {
                     </Typography>
                 </CardContent>
             </Card>
-            <Box sx={{display: 'flex', flexWrap: 'wrap', gap: '20px'}}>
+            <Box sx={{display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: {xs: 'center', sm: 'start', md: 'start'}}}>
             <Card sx={{width: '300px'}}>
                 <CardContent>
                     <TagIcon />                  
-                    <Typography variant="h4" color="text.secondary">
+                    <Typography variant="h4" color="text.warning">
                         {pending.quantity}
                     </Typography>
                     <Typography variant="h5" color="text.secondary">
@@ -78,6 +91,17 @@ const DashBoard = () => {
                     </Typography>
                     <Typography variant="h5" color="text.secondary">
                         Valor pós taxas
+                    </Typography>
+                </CardContent>
+            </Card>
+            <Card sx={{width: '300px'}}>
+                <CardContent>
+                <TagIcon />                 
+                    <Typography variant="h4" color="text.secondary">
+                        {paymentLinks.totalCount}
+                    </Typography>
+                    <Typography variant="h5" color="text.secondary">
+                        Links de pagamento
                     </Typography>
                 </CardContent>
             </Card>

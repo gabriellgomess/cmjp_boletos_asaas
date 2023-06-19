@@ -28,6 +28,8 @@ const darkTheme = createTheme({
     text: {
       primary: '#FFFFFF',
       secondary: '#e0e0e0',
+      success: '#81c784',
+      warning: '#ffb74d'
     },
     background: {
       paper: '#1D1F21',
@@ -51,6 +53,8 @@ const lightTheme = createTheme({
     text: {
       primary: '#1D1F21',
       secondary: '#1D1F21',
+      success: '#388e3c',
+      warning: '#f57c00'
     },
     background: {
       paper: '#FFFFFF',

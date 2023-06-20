@@ -88,7 +88,17 @@ function Header() {
                     sx={{ color: theme.palette.text.primary }}
                     variant="text"
                   >
-                    Cadastrar Boleto
+                    Cadastrar Cliente
+                  </Button>
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleCloseNavMenu}>
+                <Link to={`${process.env.REACT_APP_PATH}/gerar_cobranca`}>
+                  <Button
+                    sx={{ color: theme.palette.text.primary }}
+                    variant="text"
+                  >
+                    Gerar Cobrança
                   </Button>
                 </Link>
               </MenuItem>
@@ -146,7 +156,15 @@ function Header() {
                 sx={{ color: theme.palette.text.secondary }}
                 variant="text"
               >
-                Cadastrar Boleto
+                Cadastrar Cliente
+              </Button>
+            </Link>
+            <Link to={`${process.env.REACT_APP_PATH}/gerar_cobranca`}>
+              <Button
+                sx={{ color: theme.palette.text.secondary }}
+                variant="text"
+              >
+                Gerar Cobrança
               </Button>
             </Link>
             {/* <Link to={`${process.env.REACT_APP_PATH}/cobranca_lote`}>

@@ -8,13 +8,19 @@ const FormCreateCustomer = () => {
   const { register, handleSubmit, setValue, formState: { errors }, watch } = useForm();
 
   const onSubmit = (data) => {
-    // axios.post('url-da-sua-api', data)
-    //   .then(response => {
-    //     console.log(response);
-    //   })
-    //   .catch(error => {
-    //     console.error(error);
-    //   });
+    axios.post(`${process.env.REACT_APP_URL}/asaas.php?param=1`, data)
+      .then(response => {
+        if(response.data.success){
+            alert(response.data.success);
+        }else if(response.data.error){
+            alert('Erro: '+response.data.error);
+        }
+        
+        console.log(response);
+      })
+      .catch(error => {
+        console.error(error);
+      });
     console.log(data);
   };
 
@@ -30,7 +36,6 @@ const FormCreateCustomer = () => {
     axios
       .get(`https://viacep.com.br/ws/${cep}/json/`)
       .then((response) => {
-        console.log(response.data);
         setEndereco(response.data);
         setValue("address", response.data.logradouro);
         setValue("province", response.data.bairro);
@@ -53,7 +58,7 @@ const FormCreateCustomer = () => {
             <TextField {...register("mobilePhone")} label="Celular" required />
             <TextField {...register("cpfCnpj")} label="CPF/CNPJ" required />
             <TextField {...register("postalCode")} label="CEP" required />
-            <TextField {...register("address")} label="Endereço" required  InputLabelProps={{ shrink: endereco.logradouro ? true : false }}/>
+            <TextField {...register("address")} label="Endereço" required InputLabelProps={{ shrink: endereco.logradouro ? true : false }}/>
             <TextField {...register("addressNumber")} label="Número" required />
             <TextField {...register("complement")} label="Complemento" required />
             <TextField {...register("province")} label="Bairro" required  InputLabelProps={{ shrink: endereco.bairro ? true : false }}/>

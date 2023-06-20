@@ -10,6 +10,7 @@ import FormCadastro from './Pages/FormCadastro';
 import TableBilling from './Pages/TableBilling';
 import FormCadastroLote from './Pages/FormCadastroLote';
 import CobrancasRecorrentes from './Pages/CobrancasRecorrentes';
+import GenerateBilling from './Pages/GenerateBilling';
 
 // Componentes
 import Header from './Components/Header/Header';
@@ -91,6 +92,7 @@ const App = () => {
         <Routes>
           <Route path={`${process.env.REACT_APP_PATH}`} element={<Dashboard />} />
           <Route path={`${process.env.REACT_APP_PATH}/form_cadastro`} element={<FormCadastro />} />
+          <Route path={`${process.env.REACT_APP_PATH}/gerar_cobranca`} element={<GenerateBilling />} />
           {/* <Route path={`${process.env.REACT_APP_PATH}/cobranca_lote`} element={<FormCadastroLote />} /> */}
           <Route path={`${process.env.REACT_APP_PATH}/table`} element={<TableBilling />} />
           <Route path={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`} element={<CobrancasRecorrentes />} />

@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import {
   AppBar,
+  Card,
+  CardContent,
   Box,
   Toolbar,
   IconButton,
@@ -17,6 +19,7 @@ import { useTheme } from "@mui/material/styles";
 import MenuIcon from "@mui/icons-material/Menu";
 
 import Logo from "../../assets/img/logo_grey.png";
+import LogoHorizontal from "../../assets/img/logotipo_amc.png";
 
 function Header() {
   const theme = useTheme();
@@ -35,12 +38,14 @@ function Header() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Box sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}>
-            {/* <img
-              width={80}
-              src={Logo}
+          <Box sx={{ display: { xs: "none", md: "flex" }, mr: 1}}>
+            
+            <img
+              width={180}
+              src={LogoHorizontal}
               alt="Logo Casa do Menino Jesus de Praga"
-            /> */}
+            />
+            
           </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -88,7 +93,7 @@ function Header() {
                     sx={{ color: theme.palette.text.primary }}
                     variant="text"
                   >
-                    Cadastrar Cliente
+                    Cadastrar Doador
                   </Button>
                 </Link>
               </MenuItem>
@@ -134,12 +139,14 @@ function Header() {
               </MenuItem> */}
             </Menu>
           </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>
-            {/* <img
-              width={80}
-              src={Logo}
+          <Box sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>     
+               
+            <img
+              width={160}
+              src={LogoHorizontal}
               alt="Logo Casa do Menino Jesus de Praga"
-            /> */}
+            />
+            
           </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
@@ -156,7 +163,7 @@ function Header() {
                 sx={{ color: theme.palette.text.secondary }}
                 variant="text"
               >
-                Cadastrar Cliente
+                Cadastrar Doador
               </Button>
             </Link>
             <Link to={`${process.env.REACT_APP_PATH}/gerar_cobranca`}>

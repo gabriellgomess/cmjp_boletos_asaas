@@ -15,10 +15,60 @@ import GenerateBilling from './Pages/GenerateBilling';
 // Componentes
 import Header from './Components/Header/Header';
 
+// const darkTheme = createTheme({
+//   palette: {
+//     primary: {
+//       main: '#cd2122',
+//       light: '#ff983f',
+//       dark: '#ffffa1',
+//     },
+//     accent: {
+//       main: '#F5F5F5',
+//       light: '#929292',
+//     },
+//     text: {
+//       primary: '#FFFFFF',
+//       secondary: '#e0e0e0',
+//       success: '#81c784',
+//       warning: '#ffb74d'
+//     },
+//     background: {
+//       paper: '#1D1F21',
+//       default: '#2c2e30',
+//       dark: '#444648',
+//     },
+//   },
+// });
+
+// const lightTheme = createTheme({
+//   palette: {
+//     primary: {
+//       main: '#cd2122',
+//       light: '#ff983f',
+//       dark: '#ff983f',
+//     },
+//     accent: {
+//       main: '#1D1F21',
+//       light: '#7a7a7a',
+//     },
+//     text: {
+//       primary: '#1D1F21',
+//       secondary: '#1D1F21',
+//       success: '#388e3c',
+//       warning: '#f57c00'
+//     },
+//     background: {
+//       paper: '#FFFFFF',
+//       default: '#F5F5F5',
+//       dark: '#e0e0e0',
+//     },
+//   },
+// });
+
 const darkTheme = createTheme({
   palette: {
     primary: {
-      main: '#cd2122',
+      main: '#e9434b',
       light: '#ff983f',
       dark: '#ffffa1',
     },
@@ -40,10 +90,15 @@ const darkTheme = createTheme({
   },
 });
 
+// #74c3bb verde
+// #f2a243 amarelo
+// #e9434b vermelho
+// #080b0a preto
+
 const lightTheme = createTheme({
   palette: {
     primary: {
-      main: '#cd2122',
+      main: '#e9434b',
       light: '#ff983f',
       dark: '#ff983f',
     },

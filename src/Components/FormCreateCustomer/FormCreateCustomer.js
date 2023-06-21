@@ -49,7 +49,7 @@ const FormCreateCustomer = () => {
 
   return (
     <>
-    <Typography sx={{textAlign: 'center'}} variant='h3'>Cadastro de cliente</Typography>
+    <Typography sx={{textAlign: 'center'}} variant='h3'>Cadastro de doador</Typography>
     <form style={{display: 'flex', justifyContent: 'center', marginTop: '20px'}} onSubmit={handleSubmit(onSubmit)}>        
         <Box sx={{width: '50%', display: 'flex', flexDirection: 'column', gap: '15px'}}>
             <TextField {...register("name")} label="Nome" required />

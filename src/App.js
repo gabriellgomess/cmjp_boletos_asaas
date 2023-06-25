@@ -11,9 +11,12 @@ import TableBilling from './Pages/TableBilling';
 import FormCadastroLote from './Pages/FormCadastroLote';
 import CobrancasRecorrentes from './Pages/CobrancasRecorrentes';
 import GenerateBilling from './Pages/GenerateBilling';
+import BillingManager from './Pages/BillingManager';
+import CustomerManager from './Pages/CustomerManager';
 
 // Componentes
 import Header from './Components/Header/Header';
+import Footer from './Components/Footer/Footer';
 
 // const darkTheme = createTheme({
 //   palette: {
@@ -84,6 +87,7 @@ const darkTheme = createTheme({
     },
     background: {
       paper: '#1D1F21',
+      green: '#74c3bb',
       default: '#2c2e30',
       dark: '#444648',
     },
@@ -114,6 +118,7 @@ const lightTheme = createTheme({
     },
     background: {
       paper: '#FFFFFF',
+      green: '#74c3bb',
       default: '#F5F5F5',
       dark: '#e0e0e0',
     },
@@ -151,9 +156,12 @@ const App = () => {
           {/* <Route path={`${process.env.REACT_APP_PATH}/cobranca_lote`} element={<FormCadastroLote />} /> */}
           <Route path={`${process.env.REACT_APP_PATH}/table`} element={<TableBilling />} />
           <Route path={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`} element={<CobrancasRecorrentes />} />
+          <Route path={`${process.env.REACT_APP_PATH}/gerenciar_cobrancas`} element={<BillingManager />} />
+          <Route path={`${process.env.REACT_APP_PATH}/gerenciar_doadores`} element={<CustomerManager />} />
         </Routes>        
       </Container>
     </Box>
+    <Footer />
     </ThemeProvider>
   );
 }

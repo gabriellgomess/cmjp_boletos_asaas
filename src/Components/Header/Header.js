@@ -107,36 +107,27 @@ function Header() {
                   </Button>
                 </Link>
               </MenuItem>
-              {/* <MenuItem onClick={handleCloseNavMenu}>
-                <Link to={`${process.env.REACT_APP_PATH}/cobranca_lote`}>
-                  <Button
-                    sx={{ color: theme.palette.text.secondary }}
-                    variant="text"
-                  >
-                    Gerar Cobranças em Lote
-                  </Button>
-                </Link>
-              </MenuItem> */}
-              {/* <MenuItem onClick={handleCloseNavMenu}>
-                <Link to={`${process.env.REACT_APP_PATH}/table`}>
+              <MenuItem onClick={handleCloseNavMenu}>
+                <Link to={`${process.env.REACT_APP_PATH}/gerenciar_doadores`}>
                   <Button
                     sx={{ color: theme.palette.text.primary }}
                     variant="text"
                   >
-                    Histórico de boletos
+                    Gerenciar Doadores
                   </Button>
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Link to={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`}>
+                <Link to={`${process.env.REACT_APP_PATH}/gerenciar_cobrancas`}>
                   <Button
                     sx={{ color: theme.palette.text.primary }}
                     variant="text"
                   >
-                    Cobranças Recorrentes
+                    Gerenciar Cobranças
                   </Button>
                 </Link>
-              </MenuItem> */}
+              </MenuItem>             
+              
             </Menu>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>     
@@ -174,30 +165,23 @@ function Header() {
                 Gerar Cobrança
               </Button>
             </Link>
-            {/* <Link to={`${process.env.REACT_APP_PATH}/cobranca_lote`}>
+            <Link to={`${process.env.REACT_APP_PATH}/gerenciar_doadores`}>
               <Button
                 sx={{ color: theme.palette.text.secondary }}
                 variant="text"
               >
-                Gerar Cobranças em Lote
-              </Button>
-            </Link> */}
-            {/* <Link to={`${process.env.REACT_APP_PATH}/table`}>
-              <Button
-                sx={{ color: theme.palette.text.secondary }}
-                variant="text"
-              >
-                Histórico de boletos
+                Gerenciar Doadores
               </Button>
             </Link>
-            <Link to={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`}>
+            <Link to={`${process.env.REACT_APP_PATH}/gerenciar_cobrancas`}>
               <Button
                 sx={{ color: theme.palette.text.secondary }}
                 variant="text"
               >
-                Cobranças Recorrentes
+                Gerenciar Cobranças
               </Button>
-            </Link> */}
+            </Link>            
+            
           </Box>
         </Toolbar>
       </Container>

@@ -126,7 +126,17 @@ function Header() {
                     Gerenciar Cobranças
                   </Button>
                 </Link>
-              </MenuItem>             
+              </MenuItem>
+              <MenuItem onClick={handleCloseNavMenu}>
+                <Link to={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`}>
+                  <Button
+                    sx={{ color: theme.palette.text.primary }}
+                    variant="text"
+                  >
+                    Assinaturas
+                  </Button>
+                </Link>
+              </MenuItem>           
               
             </Menu>
           </Box>
@@ -180,7 +190,15 @@ function Header() {
               >
                 Gerenciar Cobranças
               </Button>
-            </Link>            
+            </Link>
+            <Link to={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`}>
+              <Button
+                sx={{ color: theme.palette.text.secondary }}
+                variant="text"
+              >
+                Assinaturas
+              </Button>
+            </Link>              
             
           </Box>
         </Toolbar>

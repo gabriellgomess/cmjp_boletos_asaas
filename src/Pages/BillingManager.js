@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from "react";
+import FormAddPost from "../Components/FormAddPost/FormAddPost";
 
 const BillingManager = () => {
     return(
         <>
-            <h1>Gerenciador de Cobranças</h1>
+            <FormAddPost />
         </>
     )
 

@@ -92,7 +92,18 @@ const darkTheme = createTheme({
       dark: '#444648',
     },
   },
+  overrides: {
+    MuiInput: {
+      input: {
+        color: '#FFFFFF',
+        '&[disabled]': {
+          color: '#dedede',
+        },
+      },
+    },
+  },
 });
+
 
 // #74c3bb verde
 // #f2a243 amarelo
@@ -123,6 +134,16 @@ const lightTheme = createTheme({
       dark: '#e0e0e0',
     },
   },
+  // overrides: {
+  //   MuiInput: {
+  //     input: {
+  //       color: '#FFFFFF',
+  //       '&[disabled]': {
+  //         color: '#dedede',
+  //       },
+  //     },
+  //   },
+  // },
 });
 
 const App = () => {

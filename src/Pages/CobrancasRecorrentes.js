@@ -6,10 +6,14 @@ import {
   Box,
   IconButton,
   Button,
+  Tooltip,
 } from "@mui/material";
 import axios from "axios";
 import ReplayIcon from "@mui/icons-material/Replay";
 import { DataGrid, ptBR } from "@mui/x-data-grid";
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 
 const CobrancasRecorrentes = () => {
   const [cobrancasRecorrentes, setCobrancasRecorrentes] = useState([]);
@@ -44,7 +48,7 @@ const CobrancasRecorrentes = () => {
     {
       field: "id",
       headerName: "ID",
-      width: 300,
+      width: 200,
       // editable: true,
     },
     {
@@ -67,7 +71,7 @@ const CobrancasRecorrentes = () => {
     {
       field: "invoiceUrl",
       headerName: "URL da Cobrança",
-      width: 200,
+      width: 150,
       // editable: true,
       disableClickEventBubbling: true,
       renderCell: (params) => (
@@ -88,6 +92,29 @@ const CobrancasRecorrentes = () => {
             currency: "BRL",
           })}
         </Typography>
+      ),
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 100,
+      disableClickEventBubbling: true,
+      renderCell: (params) => (
+        <>
+          {params.row.status === "RECEIVED" ? (
+            <Tooltip title="Recebido">
+            <CheckCircleOutlinedIcon color="success" />
+            </Tooltip>
+          ) : params.row.status === "PENDING" ? (
+            <Tooltip title="Aguardando pagamento">
+            <RemoveCircleOutlineOutlinedIcon color="warning" />
+            </Tooltip>
+          ) : (
+            <Tooltip title="Não pago">
+            <CancelOutlinedIcon color="error" />
+            </Tooltip>
+          )}
+        </>
       ),
     },
     {

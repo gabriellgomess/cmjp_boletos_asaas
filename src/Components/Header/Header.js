@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
+import {MyContext} from '../../contexts/MyContext'
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   AppBar,
   Card,
@@ -17,6 +18,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 
 import MenuIcon from "@mui/icons-material/Menu";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import Logo from "../../assets/img/logo_horizontal_cmjp.png";
 import LogoHorizontal from "../../assets/img/logotipo_amc.png";
@@ -25,6 +27,7 @@ import LogoLG from "../../assets/img/logotipo_amc_lg.png";
 
 function Header() {
   const theme = useTheme();
+  const {rootState,logoutUser} = useContext(MyContext);
 
   const [anchorElNav, setAnchorElNav] = useState(null);
 
@@ -52,7 +55,8 @@ function Header() {
                   width={120}
                   src={LogoLG}
                   alt="Logo Casa do Menino Jesus de Praga"
-                />                
+                /> 
+                            
               </Box>
               <Box sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>     
                
@@ -60,8 +64,7 @@ function Header() {
                  width={160}
                  src={LogoHorizontal}
                  alt="Logo Casa do Menino Jesus de Praga"
-               />
-               
+               />               
              </Box>
               </Toolbar>
           </Container>
@@ -70,17 +73,7 @@ function Header() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* <Box sx={{ display: { xs: "none", md: "flex" }, mr: 1}}>
-            
-            <img
-              width={180}
-              src={LogoHorizontal}
-              alt="Logo Casa do Menino Jesus de Praga"
-            />
-            
-          </Box> */}
-
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" }, justifyContent: 'space-between' }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -91,6 +84,9 @@ function Header() {
             >
               <MenuIcon />
             </IconButton>
+            <IconButton onClick={logoutUser} aria-label="delete" size="large">
+              <LogoutIcon fontSize="inherit" />
+            </IconButton> 
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -168,22 +164,13 @@ function Header() {
                     Recorrentes
                   </Button>
                 </Link>
-              </MenuItem>           
+              </MenuItem>          
               
             </Menu>
           </Box>
-          {/* <Box sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>     
-               
-            <img
-              width={160}
-              src={LogoHorizontal}
-              alt="Logo Casa do Menino Jesus de Praga"
-            />
-            
-          </Box> */}
-
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-          <Link to={`${process.env.REACT_APP_PATH}`}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box>
+              <Link to={`${process.env.REACT_APP_PATH}`}>
               <Button
                 sx={{ color: theme.palette.text.secondary }}
                 variant="text"
@@ -230,7 +217,11 @@ function Header() {
               >
                 Recorrentes
               </Button>
-            </Link>              
+            </Link>
+            </Box>
+            <IconButton onClick={logoutUser} aria-label="delete" size="large">
+              <LogoutIcon fontSize="inherit" />
+            </IconButton>           
             
           </Box>
         </Toolbar>

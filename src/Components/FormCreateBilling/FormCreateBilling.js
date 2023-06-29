@@ -46,7 +46,7 @@ const FormCreateBilling = () => {
     }, []);
 
     // Criar doadores para popular o autocomplete
-    const doadores = clientes.map((cliente) => {
+    const doadores = clientes?.map((cliente) => {
         return {
             label: cliente.nome + " - " + cliente.cpf_cnpj,
             value: cliente.customerID

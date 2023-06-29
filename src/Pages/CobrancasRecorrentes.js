@@ -7,24 +7,31 @@ import {
   IconButton,
   Button,
   Tooltip,
+  Modal,
+  Divider,
+  Link
 } from "@mui/material";
 import axios from "axios";
 import ReplayIcon from "@mui/icons-material/Replay";
 import { DataGrid, ptBR } from "@mui/x-data-grid";
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
-import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import SearchIcon from '@mui/icons-material/Search';
 
 const CobrancasRecorrentes = () => {
   const [cobrancasRecorrentes, setCobrancasRecorrentes] = useState([]);
   const [reload, setReload] = useState(false);
   const [open, setOpen] = useState(false);
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleOpen = () => {
-    setOpen(true);
-  };
+  const [openModal, setOpenModal] = useState(false);
+  const [modalData, setModalData] = useState([]);
+
+
+  const handleCloseModal = () => setOpenModal(false);
+  const handleOpenModal = (dados) => setOpenModal(true);
+
+  const handleClose = () => setOpen(false); 
+  const handleOpen = () => setOpen(true);
+
 
   const handleReload = () => {
     setReload(!reload);
@@ -33,18 +40,32 @@ const CobrancasRecorrentes = () => {
   useEffect(() => {
     handleOpen();
     axios
-      .get(`${process.env.REACT_APP_URL}/asaas.php?param=11`)
+      .get(`${process.env.REACT_APP_URL}/asaas.php?param=21`)
       .then((response) => {
-        setCobrancasRecorrentes(response.data.data);
+        setCobrancasRecorrentes(response.data.data[0]);
         handleClose();
-        console.log(response.data.data);
+        console.log(response.data.data[0]);
       })
       .catch((err) => {
         console.log(err);
       });
   }, [reload]);
 
+  const handleViewBillings = (id) => {
+    axios.get(`${process.env.REACT_APP_URL}/asaas.php?param=20&id=${id}`)
+    .then((response) => {
+      console.log(response.data.data);
+      setModalData(response.data.data);
+      handleOpenModal();  // abrir o modal após a obtenção dos dados
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  };
+   
+
   const columns = [
+
     {
       field: "id",
       headerName: "ID",
@@ -52,33 +73,27 @@ const CobrancasRecorrentes = () => {
       // editable: true,
     },
     {
-      field: "dueDate",
-      headerName: "Vencimento",
+      field: "customerName",
+      headerName: "Nome",
+      width: 200,
+      // editable: true,
+    },  
+    {
+      field: "dateCreated",
+      headerName: "Data de Criação",
       width: 150,
       disableClickEventBubbling: true,
       renderCell: (params) => (
         <Typography variant="body1" color="text.secondary" component="div">
-          {params.row.dueDate.split("-").reverse().join("/")}
+          {params.row.dateCreated.split("-").reverse().join("/")}
         </Typography>
       ),
     },
     {
       field: "customer",
-      headerName: "ID do Cliente",
+      headerName: "ID do Doador",
       width: 150,
       // editable: true,
-    },
-    {
-      field: "invoiceUrl",
-      headerName: "URL da Cobrança",
-      width: 150,
-      // editable: true,
-      disableClickEventBubbling: true,
-      renderCell: (params) => (
-        <Button href={params.row.invoiceUrl} target="blank">
-          Link
-        </Button>
-      ),
     },
     {
       field: "value",
@@ -101,27 +116,29 @@ const CobrancasRecorrentes = () => {
       disableClickEventBubbling: true,
       renderCell: (params) => (
         <>
-          {params.row.status === "RECEIVED" ? (
-            <Tooltip title="Recebido">
+          {params.row.status === "ACTIVE" ? (
+            <Tooltip title="Assinatura Ativa">
             <CheckCircleOutlinedIcon color="success" />
             </Tooltip>
-          ) : params.row.status === "PENDING" ? (
-            <Tooltip title="Aguardando pagamento">
-            <RemoveCircleOutlineOutlinedIcon color="warning" />
-            </Tooltip>
           ) : (
-            <Tooltip title="Não pago">
-            <CancelOutlinedIcon color="error" />
+            <Tooltip title="Assinatura Inativa">
+            <RemoveCircleOutlineOutlinedIcon color="warning" />
             </Tooltip>
           )}
         </>
       ),
     },
     {
-      field: "subscription",
-      headerName: "ID da Assinatura",
-      width: 150,
-    },
+      field: "actions",
+      headerName: "Ver",
+      width: 100,
+      disableClickEventBubbling: true,
+      renderCell: (params) => (
+        <IconButton aria-label="ver" size="large">
+          <SearchIcon onClick={()=>handleViewBillings(params.row.id)} fontSize="inherit" />
+        </IconButton>
+      ),
+    }
   ];
 
   return (
@@ -163,6 +180,35 @@ const CobrancasRecorrentes = () => {
           Carregando...
         </Typography>
       </Backdrop>
+      <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={{position: 'absolute',top: '50%',left: '50%',transform: 'translate(-50%, -50%)',width: 400,bgcolor: 'background.paper',border: '2px solid #000',boxShadow: 24,p: 4,}}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Dados da Cobrança
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            {modalData.map((item) => (
+              <Box key={item.id}>
+                  <Typography variant="body1" color="text.secondary" component="div">
+                    Vencimento {item.dueDate.split("-").reverse().join("/")}
+                  </Typography>
+                  <Typography variant="body1" color="text.secondary" component="div">
+                    Valor {item.value.toLocaleString("pt-BR", {style: "currency", currency: "BRL"})}
+                  </Typography>
+                <Link href={item.invoiceUrl} target='blank'>Link</Link>
+                  <Divider />
+                </Box>
+            ))}
+
+
+          </Typography>
+        </Box>
+      </Modal>
+
     </>
   );
 };

@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { DataGrid, ptBR } from "@mui/x-data-grid";
 import axios from "axios";
 import {
+  Backdrop,
+  CircularProgress,
   Button,
   IconButton,
   Box,
@@ -16,19 +18,25 @@ import { useForm, Controller } from "react-hook-form";
 import swal from "sweetalert";
 
 const TableCustomers = () => {
-  const [customers, setCustomers] = React.useState([]);
-  const [open, setOpen] = React.useState(false);
+  const [customers, setCustomers] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [openLoading, setOpenLoading] = useState(false);
   const { handleSubmit, control, setValue } = useForm();
+
+  const handleCloseLoading = () => setOpenLoading(false); 
+  const handleOpenLoading = () => setOpenLoading(true);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
+    handleOpenLoading();
     axios
-      .get(`${process.env.REACT_APP_URL}/buscar_clientes.php`)
+      .get(`${process.env.REACT_APP_URL}/asaas.php?param=29`)
       .then((response) => {
-        setCustomers(response.data);
-        console.log(response.data);
+        setCustomers(response.data.data);
+        console.log(response.data.data);
+        handleCloseLoading();
       })
       .catch((error) => {
         console.error(error);
@@ -36,20 +44,26 @@ const TableCustomers = () => {
   }, []);
   const columns = [
     {
-      field: "nome",
+      field: "id",
+      headerName: "ID do Doador",
+      width: 150,
+      // editable: true,
+    },
+    {
+      field: "name",
       headerName: "Nome",
       width: 300,
       // editable: true,
     },
     {
-      field: "cpf_cnpj",
+      field: "cpfCnpj",
       headerName: "CPF/CNPJ",
       width: 150,
       // editable: true,
     },
     {
-      field: "celular",
-      headerName: "Telefone",
+      field: "mobilePhone",
+      headerName: "Celular",
       width: 150,
       // editable: true,
     },
@@ -58,13 +72,7 @@ const TableCustomers = () => {
       headerName: "E-mail",
       width: 200,
       // editable: true,
-    },
-    {
-      field: "customerID",
-      headerName: "ID do Doador",
-      width: 150,
-      // editable: true,
-    },
+    },    
     {
       field: "actions",
       headerName: "Editar",
@@ -160,12 +168,12 @@ const TableCustomers = () => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
+            width: { xs: "90%", sm: 600, md: 700, lg: 800, xl: 900 },
           }}
         >
           <form onSubmit={handleSave}>
             <Box
-              sx={{
-                width: { xs: "90%", sm: 600, md: 700, lg: 800, xl: 900 },
+              sx={{                
                 bgcolor: "background.paper",
                 border: "2px solid #000",
                 boxShadow: 24,
@@ -179,7 +187,7 @@ const TableCustomers = () => {
                 Editar dados do doador
               </Typography>
               <Controller
-                name="nome"
+                name="name"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
@@ -194,7 +202,7 @@ const TableCustomers = () => {
                 )}
               />
               <Controller
-                name="cpf_cnpj"
+                name="cpfCnpj"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
@@ -209,7 +217,7 @@ const TableCustomers = () => {
                 )}
               />
               <Controller
-                name="celular"
+                name="mobilePhone"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
@@ -239,7 +247,7 @@ const TableCustomers = () => {
                 )}
               />
               <Controller
-                name="cep"
+                name="postalCode"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
@@ -254,7 +262,7 @@ const TableCustomers = () => {
                 )}
               />
               <Controller
-                name="endereco"
+                name="address"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
@@ -270,7 +278,7 @@ const TableCustomers = () => {
               />
               <Box sx={{ display: "flex", gap: "10px" }}>
                 <Controller
-                  name="numero_endereco"
+                  name="addressNumber"
                   control={control}
                   defaultValue=""
                   render={({ field }) => (
@@ -286,7 +294,7 @@ const TableCustomers = () => {
                 />
 
                 <Controller
-                  name="complemento"
+                  name="complement"
                   control={control}
                   defaultValue=""
                   render={({ field }) => (
@@ -303,7 +311,7 @@ const TableCustomers = () => {
               </Box>
               <Box sx={{ display: "flex", gap: "10px" }}>
                 <Controller
-                  name="bairro"
+                  name="province"
                   control={control}
                   defaultValue=""
                   render={({ field }) => (
@@ -319,7 +327,7 @@ const TableCustomers = () => {
                 />
 
                 <Controller
-                  name="cidade"
+                  name="city"
                   control={control}
                   defaultValue=""
                   render={({ field }) => (
@@ -335,7 +343,7 @@ const TableCustomers = () => {
                 />
               </Box>
               <Controller
-                name="estado"
+                name="state"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
@@ -350,7 +358,7 @@ const TableCustomers = () => {
                 )}
               />
               <Controller
-                name="notificacao"
+                name="notificationDisabled"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
@@ -369,6 +377,21 @@ const TableCustomers = () => {
           </form>
         </Box>
       </Modal>
+      <Backdrop
+        sx={{
+          color: "#fff",
+          display: "flex",
+          flexDirection: "column",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={openLoading}
+        onClick={handleCloseLoading}
+      >
+        <CircularProgress color="inherit" />
+        <Typography variant="h6" component="div" sx={{ mt: 1 }}>
+          Carregando...
+        </Typography>
+      </Backdrop>
     </Box>
   );
 };

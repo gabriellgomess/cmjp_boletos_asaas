@@ -18,8 +18,10 @@ import { useTheme } from "@mui/material/styles";
 
 import MenuIcon from "@mui/icons-material/Menu";
 
-import Logo from "../../assets/img/logo_grey.png";
+import Logo from "../../assets/img/logo_horizontal_cmjp.png";
 import LogoHorizontal from "../../assets/img/logotipo_amc.png";
+import LogoLG from "../../assets/img/logotipo_amc_lg.png";
+
 
 function Header() {
   const theme = useTheme();
@@ -35,10 +37,40 @@ function Header() {
   };
 
   return (
+    <>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar sx={{background: '#fff'}} position="static">
+          <Container maxWidth="xl">
+            <Toolbar disableGutters>
+              <Box sx={{ display: { xs: "none", md: "flex" }, justifyContent: 'space-between', padding: 3, mr: 1, width: '100%' }}>
+              <img
+                  height={90}
+                  src={Logo}
+                  alt="Logo Casa do Menino Jesus de Praga"
+                />
+                <img
+                  width={120}
+                  src={LogoLG}
+                  alt="Logo Casa do Menino Jesus de Praga"
+                />                
+              </Box>
+              <Box sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>     
+               
+               <img
+                 width={160}
+                 src={LogoHorizontal}
+                 alt="Logo Casa do Menino Jesus de Praga"
+               />
+               
+             </Box>
+              </Toolbar>
+          </Container>
+        </AppBar>
+      </Box>
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Box sx={{ display: { xs: "none", md: "flex" }, mr: 1}}>
+          {/* <Box sx={{ display: { xs: "none", md: "flex" }, mr: 1}}>
             
             <img
               width={180}
@@ -46,7 +78,7 @@ function Header() {
               alt="Logo Casa do Menino Jesus de Praga"
             />
             
-          </Box>
+          </Box> */}
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -117,7 +149,7 @@ function Header() {
                   </Button>
                 </Link>
               </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu}>
+              {/* <MenuItem onClick={handleCloseNavMenu}>
                 <Link to={`${process.env.REACT_APP_PATH}/gerenciar_cobrancas`}>
                   <Button
                     sx={{ color: theme.palette.text.primary }}
@@ -126,21 +158,21 @@ function Header() {
                     Gerenciar Cobranças
                   </Button>
                 </Link>
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem onClick={handleCloseNavMenu}>
                 <Link to={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`}>
                   <Button
                     sx={{ color: theme.palette.text.primary }}
                     variant="text"
                   >
-                    Assinaturas
+                    Recorrentes
                   </Button>
                 </Link>
               </MenuItem>           
               
             </Menu>
           </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>     
+          {/* <Box sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>     
                
             <img
               width={160}
@@ -148,7 +180,7 @@ function Header() {
               alt="Logo Casa do Menino Jesus de Praga"
             />
             
-          </Box>
+          </Box> */}
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
           <Link to={`${process.env.REACT_APP_PATH}`}>
@@ -183,20 +215,20 @@ function Header() {
                 Gerenciar Doadores
               </Button>
             </Link>
-            <Link to={`${process.env.REACT_APP_PATH}/gerenciar_cobrancas`}>
+            {/* <Link to={`${process.env.REACT_APP_PATH}/gerenciar_cobrancas`}>
               <Button
                 sx={{ color: theme.palette.text.secondary }}
                 variant="text"
               >
                 Gerenciar Cobranças
               </Button>
-            </Link>
+            </Link> */}
             <Link to={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`}>
               <Button
                 sx={{ color: theme.palette.text.secondary }}
                 variant="text"
               >
-                Assinaturas
+                Recorrentes
               </Button>
             </Link>              
             
@@ -204,6 +236,9 @@ function Header() {
         </Toolbar>
       </Container>
     </AppBar>
-  );
+
+
+    </>
+      );
 }
 export default Header;

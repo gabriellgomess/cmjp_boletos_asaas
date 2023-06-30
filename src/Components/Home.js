@@ -18,7 +18,7 @@ function Home(){
     if(isAuth)
     {
         // Navigate to Dashboard
-        navigate(`${process.env.REACT_APP_PATH}`);
+        navigate(`${process.env.REACT_APP_PATH}/dashboard`);
 
         return null; // Return null or <></> while waiting for the navigate to complete
     }

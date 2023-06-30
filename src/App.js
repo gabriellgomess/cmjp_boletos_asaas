@@ -24,7 +24,7 @@ import Home from './Components/Home';
 function WithAuthentication({ children }) {
   const { rootState } = useContext(MyContext);
   const { isAuth } = rootState;
-  return isAuth ? children : <Navigate to="/" replace />;
+  return isAuth ? children : <Navigate to={`${process.env.REACT_APP_PATH}`} replace />;
 }
 
 const darkTheme = createTheme({
@@ -93,16 +93,6 @@ const lightTheme = createTheme({
       dark: '#e0e0e0',
     },
   },
-  // overrides: {
-  //   MuiInput: {
-  //     input: {
-  //       color: '#FFFFFF',
-  //       '&[disabled]': {
-  //         color: '#dedede',
-  //       },
-  //     },
-  //   },
-  // },
 });
 
 const App = () => {
@@ -131,8 +121,8 @@ const App = () => {
               /> 
             </Box>           
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path={`${process.env.REACT_APP_PATH}`} element={<WithAuthentication><Dashboard /></WithAuthentication>} />
+              <Route path={`${process.env.REACT_APP_PATH}`} element={<Home />} />
+              <Route path={`${process.env.REACT_APP_PATH}/dashboard`} element={<WithAuthentication><Dashboard /></WithAuthentication>} />
               <Route path={`${process.env.REACT_APP_PATH}/form_cadastro`} element={<WithAuthentication><FormCadastro /></WithAuthentication>} />
               <Route path={`${process.env.REACT_APP_PATH}/gerar_cobranca`} element={<WithAuthentication><GenerateBilling /></WithAuthentication>} />
               <Route path={`${process.env.REACT_APP_PATH}/table`} element={<WithAuthentication><TableBilling /></WithAuthentication>} />

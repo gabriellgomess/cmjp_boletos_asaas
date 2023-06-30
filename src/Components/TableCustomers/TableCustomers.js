@@ -42,6 +42,7 @@ const TableCustomers = () => {
         console.error(error);
       });
   }, []);
+  
   const columns = [
     {
       field: "id",

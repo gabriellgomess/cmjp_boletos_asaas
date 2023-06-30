@@ -26,8 +26,9 @@ import LogoLG from "../../assets/img/logotipo_amc_lg.png";
 
 
 function Header() {
-  const theme = useTheme();
+  const theme = useTheme();  
   const {rootState,logoutUser} = useContext(MyContext);
+  const {isAuth, theUser } = rootState;
 
   const [anchorElNav, setAnchorElNav] = useState(null);
 
@@ -42,7 +43,7 @@ function Header() {
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar sx={{background: '#fff'}} position="static">
+        <AppBar sx={{background: theme.palette.background.paper}} position="static">
           <Container maxWidth="xl">
             <Toolbar disableGutters>
               <Box sx={{ display: { xs: "none", md: "flex" }, justifyContent: 'space-between', padding: 3, mr: 1, width: '100%' }}>
@@ -71,8 +72,10 @@ function Header() {
         </AppBar>
       </Box>
     <AppBar position="static">
-      <Container maxWidth="xl">
+      <Container maxWidth="xl">        
         <Toolbar disableGutters>
+        {isAuth ? (
+          <>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" }, justifyContent: 'space-between' }}>
             <IconButton
               size="large"
@@ -105,6 +108,7 @@ function Header() {
                 display: { xs: "block", md: "none" },
               }}
             >
+              
               <MenuItem onClick={handleCloseNavMenu}>
                 <Link to={`${process.env.REACT_APP_PATH}`}>
                   <Button
@@ -164,7 +168,8 @@ function Header() {
                     Recorrentes
                   </Button>
                 </Link>
-              </MenuItem>          
+              </MenuItem>
+
               
             </Menu>
           </Box>
@@ -224,7 +229,11 @@ function Header() {
             </IconButton>           
             
           </Box>
+          </>
+          ) : (
+            null)}
         </Toolbar>
+        
       </Container>
     </AppBar>
 

@@ -4,10 +4,12 @@ import {
   Box,
   Card,
   CardContent,
+  CardMedia,
   TextField,
   Typography,
-  Button,
+  Button
 } from "@mui/material";
+import Woman from "../assets/img/woman.png"
 
 function Login() {
   const { toggleNav, loginUser, isLoggedIn } = useContext(MyContext);
@@ -64,11 +66,12 @@ function Login() {
   }
 
   return (
-    <Card sx={{ width: "350px", margin: "0 auto" }}>
+    <Card sx={{ width: "600px", margin: "0 auto", display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
+      <img height={210} src={Woman} alt="mulher" />
       <CardContent
-        sx={{ display: "flex", flexDirection: "column", gap: "20px" }}
-      >
-        <Typography variant="h4">Login</Typography>
+        sx={{ display: "flex", flexDirection: "column", gap: "20px", width: '50%' }}
+      >        
+        <Typography variant="h4">Área Restrita</Typography>
         <form onSubmit={submitForm} noValidate>
           <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <TextField
@@ -96,7 +99,6 @@ function Login() {
             </Button>
           </Box>
         </form>
-
         <Button onClick={toggleNav} variant="outlined">
           Cadastrar
         </Button>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-
+import { MyContext } from "../../contexts/MyContext";
 import { useForm } from 'react-hook-form';
 import axios from 'axios'
 import { TextField, Button, Box, Typography, InputLabel, MenuItem, FormControl, Select, Card, CardContent, FormControlLabel, Checkbox, Divider, Autocomplete, Modal } from '@mui/material'
@@ -19,6 +19,8 @@ const style = {
   };
 
 const FormCreateBilling = () => {
+    const { rootState, fetchCustomers } = useContext(MyContext);
+    const { customers } = rootState;
     const [clientes, setClientes] = useState([]);
     const [customerID, setCustomerID] = useState('');
     const [cpfCnpj, setCpfCnpj] = useState('');
@@ -34,22 +36,12 @@ const FormCreateBilling = () => {
         window.location.reload();
     }
 
-    useEffect(() => {
-        axios.get(`${process.env.REACT_APP_URL}/buscar_clientes.php`)
-            .then(response => {
-                setClientes(response.data);
-                console.log(response.data)
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }, []);
 
     // Criar doadores para popular o autocomplete
-    const doadores = clientes?.map((cliente) => {
+    const doadores = customers?.map((cliente) => {
         return {
-            label: cliente.nome + " - " + cliente.cpf_cnpj,
-            value: cliente.customerID
+            label: cliente.name + " - " + cliente.cpfCnpj,
+            value: cliente.id
         }
     })
 
@@ -86,7 +78,7 @@ const FormCreateBilling = () => {
 
    return (
         <>
-            <Typography sx={{textAlign: 'center'}} variant='h3'>Cobrança</Typography>
+            <Typography sx={{textAlign: 'center'}} variant='h3'>Gerar Doação</Typography>
             {/* <Button onClick={handleOpen}>Open modal</Button> */}
             <Card sx={{width: '100%', margin: 'auto', marginTop: '20px'}}>
                 <CardContent>
@@ -110,7 +102,7 @@ const FormCreateBilling = () => {
             {customerID &&
                 <Card sx={{width: '100%', margin: 'auto', marginTop: '20px'}}>
                     <CardContent>
-                        <Typography variant='h5'>Criar cobrança</Typography>
+                        <Typography variant='h5'>Dados da doação</Typography>
                         <form style={{display: 'flex', justifyContent: 'center', marginTop: '20px'}} onSubmit={handleSubmit(onSubmit)}>
                             <Box sx={{width: {xs: '100%', sm: '75%', md: '50%'}, display: 'flex', flexDirection: 'column', gap: '15px'}}>
                                 <TextField {...register("customerID")} label="ID do cliente" disabled />

@@ -6,6 +6,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 
 import MyContextProvider, { MyContext } from "./contexts/MyContext";
 
+import axios from 'axios';
+
 // Páginas
 import Dashboard from './Pages/Dashboard';
 import FormCadastro from './Pages/FormCadastro';
@@ -97,6 +99,7 @@ const lightTheme = createTheme({
 
 const App = () => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") === "dark" ? darkTheme : lightTheme);
+  const [customers, setCustomers] = useState([]);
 
   useEffect(() => {
     localStorage.setItem("theme", theme === darkTheme ? "dark" : "light");

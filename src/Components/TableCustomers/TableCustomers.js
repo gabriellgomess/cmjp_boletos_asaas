@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { MyContext } from "../../contexts/MyContext";
 import { DataGrid, ptBR } from "@mui/x-data-grid";
 import axios from "axios";
 import {
@@ -18,10 +19,12 @@ import { useForm, Controller } from "react-hook-form";
 import swal from "sweetalert";
 
 const TableCustomers = () => {
-  const [customers, setCustomers] = useState([]);
+  const { rootState, fetchCustomers } = useContext(MyContext);
+  const { customers } = rootState;
   const [open, setOpen] = useState(false);
   const [openLoading, setOpenLoading] = useState(false);
   const { handleSubmit, control, setValue } = useForm();
+  const [cityName, setCityName] = useState("");
 
   const handleCloseLoading = () => setOpenLoading(false); 
   const handleOpenLoading = () => setOpenLoading(true);
@@ -29,20 +32,7 @@ const TableCustomers = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  useEffect(() => {
-    handleOpenLoading();
-    axios
-      .get(`${process.env.REACT_APP_URL}/asaas.php?param=29`)
-      .then((response) => {
-        setCustomers(response.data.data);
-        console.log(response.data.data);
-        handleCloseLoading();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-  
+
   const columns = [
     {
       field: "id",
@@ -89,18 +79,30 @@ const TableCustomers = () => {
   ];
 
   const handleClickRow = (customer) => {
+    axios.post(`${process.env.REACT_APP_URL}/asaas.php?param=30`, {code: customer.city})
+    .then((response) => {
+      console.log(response.data);
+      setCityName(response.data.name);
+  
+      // Mova a atualização dos valores do formulário para dentro do callback then, depois que o estado da cidade foi atualizado.
+      for (let key in customer) {
+        setValue(key, customer[key]);
+      }
+      setValue("notificationDisabled", customer.notificationDisabled);
+      setValue("city", response.data.name); // set city to the actual city name
+    })
+    .catch((error) => {
+      console.error(error);
+    });
     setOpen(true);
-    for (let key in customer) {
-      setValue(key, customer[key]);
-    }
   };
+  
 
   const handleSave = handleSubmit((data) => {
-    console.log(data);
+    
     axios
       .post(`${process.env.REACT_APP_URL}/asaas.php?param=2`, data)
       .then((response) => {
-        console.log(response.data);
         if (response.data.success) {
           swal({
             icon: "success",
@@ -361,16 +363,16 @@ const TableCustomers = () => {
               <Controller
                 name="notificationDisabled"
                 control={control}
-                defaultValue=""
+                defaultValue={false} // Se não houver um valor a ser preenchido, ele irá considerar como não marcado
                 render={({ field }) => (
                   <FormControlLabel
-                    {...field}
-                    control={<Checkbox />}
+                    control={
+                      <Checkbox checked={field.value} onChange={e => field.onChange(e.target.checked)} />
+                    }
                     label="Desativar notificações"
                   />
                 )}
               />
-
               <Button variant="contained" type="submit">
                 Salvar
               </Button>

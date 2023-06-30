@@ -66,12 +66,12 @@ function Login() {
   }
 
   return (
-    <Card sx={{ width: "600px", margin: "0 auto", display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
+    <Card sx={{ maxWidth: "600px", margin: "0 auto", display: 'flex', flexDirection:{xs:'column', sm: 'column', md: 'row'}, justifyContent: 'space-evenly', alignItems: 'center' }}>
       <img height={210} src={Woman} alt="mulher" />
       <CardContent
-        sx={{ display: "flex", flexDirection: "column", gap: "20px", width: '50%' }}
+        sx={{ display: "flex", flexDirection: "column", gap: "20px", width: {xs: '100%', sm: '100%', md: '50%'} }}
       >        
-        <Typography variant="h4">Área Restrita</Typography>
+        <Typography sx={{margin: '0 auto'}} variant="h4">Acessar</Typography>
         <form onSubmit={submitForm} noValidate>
           <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <TextField
@@ -90,10 +90,8 @@ function Login() {
               value={state.userInfo.password}
               onChange={onChangeValue}
             />
-
             {errorMsg}
             {successMsg}
-
             <Button type="submit" variant="contained">
               Entrar
             </Button>

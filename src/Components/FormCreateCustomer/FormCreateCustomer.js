@@ -93,7 +93,6 @@ const FormCreateCustomer = () => {
       .catch((error) => {
         console.error(error);
       });
-    console.log(data);
   };
 
   const postalCode = watch("postalCode");

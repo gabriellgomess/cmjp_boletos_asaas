@@ -43,7 +43,7 @@ function Header() {
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar sx={{background: theme.palette.background.paper}} position="static">
+        <AppBar sx={{background: theme.palette.background.header}} position="static">
           <Container maxWidth="xl">
             <Toolbar disableGutters>
               <Box sx={{ display: { xs: "none", md: "flex" }, justifyContent: 'space-between', padding: 3, mr: 1, width: '100%' }}>
@@ -135,7 +135,7 @@ function Header() {
                     sx={{ color: theme.palette.text.primary }}
                     variant="text"
                   >
-                    Gerar Cobrança
+                    Gerar Doação
                   </Button>
                 </Link>
               </MenuItem>
@@ -148,17 +148,7 @@ function Header() {
                     Gerenciar Doadores
                   </Button>
                 </Link>
-              </MenuItem>
-              {/* <MenuItem onClick={handleCloseNavMenu}>
-                <Link to={`${process.env.REACT_APP_PATH}/gerenciar_cobrancas`}>
-                  <Button
-                    sx={{ color: theme.palette.text.primary }}
-                    variant="text"
-                  >
-                    Gerenciar Cobranças
-                  </Button>
-                </Link>
-              </MenuItem> */}
+              </MenuItem>              
               <MenuItem onClick={handleCloseNavMenu}>
                 <Link to={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`}>
                   <Button
@@ -169,8 +159,26 @@ function Header() {
                   </Button>
                 </Link>
               </MenuItem>
-
-              
+              <MenuItem onClick={handleCloseNavMenu}>
+                <Link to={`${process.env.REACT_APP_PATH}/doacoes`}>
+                  <Button
+                    sx={{ color: theme.palette.text.primary }}
+                    variant="text"
+                  >
+                    Doações
+                  </Button>
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleCloseNavMenu}>
+                <Link to={`${process.env.REACT_APP_PATH}/gerenciar_links`}>
+                  <Button
+                    sx={{ color: theme.palette.text.primary }}
+                    variant="text"
+                  >
+                    Links de Pagamento
+                  </Button>
+                </Link>
+              </MenuItem>              
             </Menu>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, alignItems: 'center', justifyContent: 'space-between' }}>
@@ -196,7 +204,7 @@ function Header() {
                 sx={{ color: theme.palette.text.secondary }}
                 variant="text"
               >
-                Gerar Cobrança
+                Gerar Doação
               </Button>
             </Link>
             <Link to={`${process.env.REACT_APP_PATH}/gerenciar_doadores`}>
@@ -206,21 +214,29 @@ function Header() {
               >
                 Gerenciar Doadores
               </Button>
-            </Link>
-            {/* <Link to={`${process.env.REACT_APP_PATH}/gerenciar_cobrancas`}>
-              <Button
-                sx={{ color: theme.palette.text.secondary }}
-                variant="text"
-              >
-                Gerenciar Cobranças
-              </Button>
-            </Link> */}
+            </Link>            
             <Link to={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`}>
               <Button
                 sx={{ color: theme.palette.text.secondary }}
                 variant="text"
               >
                 Recorrentes
+              </Button>
+            </Link>
+            <Link to={`${process.env.REACT_APP_PATH}/doacoes`}>
+              <Button
+                sx={{ color: theme.palette.text.secondary }}
+                variant="text"
+              >
+                Doações
+              </Button>
+            </Link>
+            <Link to={`${process.env.REACT_APP_PATH}/gerenciar_links`}>
+              <Button
+                sx={{ color: theme.palette.text.secondary }}
+                variant="text"
+              >
+                Links de Pagamento
               </Button>
             </Link>
             </Box>

@@ -73,6 +73,7 @@ const FormCreateBilling = () => {
             .catch(error => {
                 console.error(error);
             });    
+        console.log(data);
     };
 
 
@@ -168,9 +169,10 @@ const FormCreateBilling = () => {
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                 Forma de pagamento: {dadosCobranca.paymentMethod === 'BOLETO' ? 'Boleto' : dadosCobranca.paymentMethod === 'CREDIT_CARD' ? 'Cartão de crédito' : dadosCobranca.paymentMethod === 'PIX' ? 'Pix' : dadosCobranca.paymentMethod === 'UNDEFINED' ? 'Cliente define' : ''}
             </Typography>
+            
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                 Link do boleto: <Button href={dadosCobranca.bankSlipUrl} target='_blank'>Abrir boleto</Button>
-            </Typography>
+            </Typography>            
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                 Link do pagamento: <Button href={dadosCobranca.invoiceUrl} target='_blank'>Abrir pagamento</Button>
             </Typography>

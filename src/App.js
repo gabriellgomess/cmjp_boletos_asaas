@@ -17,6 +17,8 @@ import CobrancasRecorrentes from './Pages/CobrancasRecorrentes';
 import GenerateBilling from './Pages/GenerateBilling';
 import BillingManager from './Pages/BillingManager';
 import CustomerManager from './Pages/CustomerManager';
+import PageBillings from './Pages/PageBillings';
+import PageLinks from './Pages/PageLinks';
 
 // Componentes
 import Header from './Components/Header/Header';
@@ -47,6 +49,7 @@ const darkTheme = createTheme({
       warning: '#ffb74d'
     },
     background: {
+      header: '#626262',
       paper: '#1D1F21',
       green: '#74c3bb',
       default: '#2c2e30',
@@ -89,6 +92,7 @@ const lightTheme = createTheme({
       warning: '#f57c00'
     },
     background: {
+      header: '#FFFFFF',
       paper: '#FFFFFF',
       green: '#74c3bb',
       default: '#F5F5F5',
@@ -132,6 +136,8 @@ const App = () => {
               <Route path={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`} element={<WithAuthentication><CobrancasRecorrentes /></WithAuthentication>} />
               <Route path={`${process.env.REACT_APP_PATH}/gerenciar_cobrancas`} element={<WithAuthentication><BillingManager /></WithAuthentication>} />
               <Route path={`${process.env.REACT_APP_PATH}/gerenciar_doadores`} element={<WithAuthentication><CustomerManager /></WithAuthentication>} />
+              <Route path={`${process.env.REACT_APP_PATH}/doacoes`} element={<WithAuthentication><PageBillings /></WithAuthentication>} />
+              <Route path={`${process.env.REACT_APP_PATH}/gerenciar_links`} element={<WithAuthentication><PageLinks /></WithAuthentication>} />
             </Routes>        
           </Container>
         </Box>

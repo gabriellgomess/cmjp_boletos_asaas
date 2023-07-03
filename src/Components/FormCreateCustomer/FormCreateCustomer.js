@@ -182,7 +182,10 @@ const FormCreateCustomer = () => {
             value={rawPhone}
           />
           <TextField
-            {...register("mobilePhone", { required: true, validate: validatePhone })}
+            {...register("mobilePhone", {
+              required: true,
+              validate: validatePhone,
+            })}
             label="Celular"
             required
             // Atualize o estado e formate ao digitar
@@ -204,7 +207,7 @@ const FormCreateCustomer = () => {
         </Box>
         <Box
           sx={{
-            width: { xs: "100%", sm: "100%", md: "50%" },
+            width: { xs: "100%", sm: "100%", md: "48%" },
             display: "flex",
             flexDirection: "column",
             gap: "15px",

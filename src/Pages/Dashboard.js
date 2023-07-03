@@ -53,7 +53,7 @@ const DashBoard = () => {
         alignItems: "center",
       }}
     >
-      <Typography variant="h3">Dashboard</Typography>
+      <Typography variant="h5">Dashboard</Typography>
       <Box>
         <Card
           sx={{
@@ -85,7 +85,7 @@ const DashBoard = () => {
           <Card sx={{ width: "300px" }}>
             <CardContent>
               <TagIcon />
-              <Typography variant="h4" color="text.warning">
+              <Typography variant="h5" color="text.warning">
                 {pending.quantity}
               </Typography>
               <Typography variant="h5" color="text.secondary">
@@ -96,7 +96,7 @@ const DashBoard = () => {
           <Card sx={{ width: "300px" }}>
             <CardContent>
               <MonetizationOnIcon />
-              <Typography variant="h4" color="text.secondary">
+              <Typography variant="h5" color="text.secondary">
                 {pending.value?.toLocaleString("pt-br", {
                   style: "currency",
                   currency: "BRL",
@@ -110,7 +110,7 @@ const DashBoard = () => {
           <Card sx={{ width: "300px" }}>
             <CardContent>
               <MonetizationOnIcon />
-              <Typography variant="h4" color="text.secondary">
+              <Typography variant="h5" color="text.secondary">
                 {pending.netValue?.toLocaleString("pt-br", {
                   style: "currency",
                   currency: "BRL",
@@ -124,7 +124,7 @@ const DashBoard = () => {
           <Card sx={{ width: "300px" }}>
             <CardContent>
               <TagIcon />
-              <Typography variant="h4" color="text.secondary">
+              <Typography variant="h5" color="text.secondary">
                 {paymentLinks.totalCount}
               </Typography>
               <Typography variant="h5" color="text.secondary">

@@ -149,7 +149,7 @@ function Header() {
                   </Button>
                 </Link>
               </MenuItem>              
-              <MenuItem onClick={handleCloseNavMenu}>
+              {/* <MenuItem onClick={handleCloseNavMenu}>
                 <Link to={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`}>
                   <Button
                     sx={{ color: theme.palette.text.primary }}
@@ -158,7 +158,7 @@ function Header() {
                     Recorrentes
                   </Button>
                 </Link>
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem onClick={handleCloseNavMenu}>
                 <Link to={`${process.env.REACT_APP_PATH}/doacoes`}>
                   <Button
@@ -169,7 +169,7 @@ function Header() {
                   </Button>
                 </Link>
               </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu}>
+              {/* <MenuItem onClick={handleCloseNavMenu}>
                 <Link to={`${process.env.REACT_APP_PATH}/gerenciar_links`}>
                   <Button
                     sx={{ color: theme.palette.text.primary }}
@@ -178,7 +178,7 @@ function Header() {
                     Links de Pagamento
                   </Button>
                 </Link>
-              </MenuItem>              
+              </MenuItem>               */}
             </Menu>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, alignItems: 'center', justifyContent: 'space-between' }}>
@@ -215,14 +215,14 @@ function Header() {
                 Gerenciar Doadores
               </Button>
             </Link>            
-            <Link to={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`}>
+            {/* <Link to={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`}>
               <Button
                 sx={{ color: theme.palette.text.secondary }}
                 variant="text"
               >
                 Recorrentes
               </Button>
-            </Link>
+            </Link> */}
             <Link to={`${process.env.REACT_APP_PATH}/doacoes`}>
               <Button
                 sx={{ color: theme.palette.text.secondary }}
@@ -231,14 +231,14 @@ function Header() {
                 Doações
               </Button>
             </Link>
-            <Link to={`${process.env.REACT_APP_PATH}/gerenciar_links`}>
+            {/* <Link to={`${process.env.REACT_APP_PATH}/gerenciar_links`}>
               <Button
                 sx={{ color: theme.palette.text.secondary }}
                 variant="text"
               >
                 Links de Pagamento
               </Button>
-            </Link>
+            </Link> */}
             </Box>
             <IconButton onClick={logoutUser} aria-label="delete" size="large">
               <LogoutIcon fontSize="inherit" />

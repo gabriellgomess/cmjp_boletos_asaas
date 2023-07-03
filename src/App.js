@@ -124,7 +124,7 @@ const App = () => {
               <FormControlLabel
                 control={<Switch checked={theme === lightTheme} onChange={toggleTheme} />}
                 label={theme === lightTheme ? 'Modo Escuro' : 'Modo Claro'}
-                labelPlacement="top"
+                labelPlacement="right"
               /> 
             </Box>           
             <Routes>

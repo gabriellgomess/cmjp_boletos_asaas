@@ -97,9 +97,9 @@ function Login() {
             </Button>
           </Box>
         </form>
-        <Button onClick={toggleNav} variant="outlined">
+        {/* <Button onClick={toggleNav} variant="outlined">
           Cadastrar
-        </Button>
+        </Button> */}
       </CardContent>
     </Card>
   );

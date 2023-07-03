@@ -176,7 +176,7 @@ const LinksPagamento = () => {
                 <DialogActions>
                 <Button onClick={handleClose}>Cancelar</Button>
                 <Button onClick={() => {
-                // Aqui você pode chamar a API para atualizar os dados
+                console.log(editData);
                 handleClose();
                 }}>Salvar</Button>
             </DialogActions>

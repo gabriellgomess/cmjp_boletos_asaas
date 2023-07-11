@@ -5,7 +5,7 @@ export const MyContext = createContext();
 
 // Define the base URL
 const Axios = axios.create({
-  baseURL: "http://amigosdacasa.org.br/gerenciador-doacoes-amigosdacasa/login/",
+  baseURL: "https://amigosdacasa.org.br/gerenciador-doacoes-amigosdacasa/login/",
 });
 
 const MyContextProvider = ({ children }) => {

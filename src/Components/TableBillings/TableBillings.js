@@ -53,17 +53,17 @@ const columns = [
             </Button>
           ),
     },
-    {
-        field: 'actions',
-        headerName: 'Ações',
-        width: 150,
-        editable: true,
-        renderCell: (params) => (
-            <Button>
-                Ver
-            </Button>
-          ),
-    },
+    // {
+    //     field: 'actions',
+    //     headerName: 'Ações',
+    //     width: 150,
+    //     editable: true,
+    //     renderCell: (params) => (
+    //         <Button>
+    //             Ver
+    //         </Button>
+    //       ),
+    // },
 ];
 
 export default function TableBillings(props) {

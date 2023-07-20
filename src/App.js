@@ -132,6 +132,7 @@ const App = () => {
               <Route path={`${process.env.REACT_APP_PATH}/dashboard`} element={<WithAuthentication><Dashboard /></WithAuthentication>} />
               <Route path={`${process.env.REACT_APP_PATH}/form_cadastro`} element={<WithAuthentication><FormCadastro /></WithAuthentication>} />
               <Route path={`${process.env.REACT_APP_PATH}/gerar_cobranca`} element={<WithAuthentication><GenerateBilling /></WithAuthentication>} />
+              <Route path={`${process.env.REACT_APP_PATH}/links_pagamento`} element={<WithAuthentication><PageLinks /></WithAuthentication>} />
               <Route path={`${process.env.REACT_APP_PATH}/table`} element={<WithAuthentication><TableBilling /></WithAuthentication>} />
               <Route path={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`} element={<WithAuthentication><CobrancasRecorrentes /></WithAuthentication>} />
               <Route path={`${process.env.REACT_APP_PATH}/gerenciar_cobrancas`} element={<WithAuthentication><BillingManager /></WithAuthentication>} />

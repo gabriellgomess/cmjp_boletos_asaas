@@ -188,7 +188,6 @@ const FormCreateBilling = () => {
             >
               <Tab label={<AttachMoneyIcon />} {...a11yProps(0)} />
               <Tab label={<CurrencyExchangeIcon />} {...a11yProps(1)} />
-              <Tab label={<AddLinkIcon />} {...a11yProps(2)} />
             </Tabs>
           </Box>
           <CustomTabPanel valueTab={valueTab} index={0}>
@@ -341,10 +340,7 @@ const FormCreateBilling = () => {
               cpfCnpj={cpfCnpj}
               name={name}
             />
-          </CustomTabPanel>
-          <CustomTabPanel valueTab={valueTab} index={2}>
-            Link de Pagamento - Em breve
-          </CustomTabPanel>
+          </CustomTabPanel>         
         </Box>
       )}
 

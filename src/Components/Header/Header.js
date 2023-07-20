@@ -140,6 +140,16 @@ function Header() {
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
+                <Link to={`${process.env.REACT_APP_PATH}/links_pagamento`}>
+                  <Button
+                    sx={{ color: theme.palette.text.primary }}
+                    variant="text"
+                  >
+                    Links de Pagamento
+                  </Button>
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleCloseNavMenu}>
                 <Link to={`${process.env.REACT_APP_PATH}/gerenciar_doadores`}>
                   <Button
                     sx={{ color: theme.palette.text.primary }}
@@ -205,6 +215,14 @@ function Header() {
                 variant="text"
               >
                 Gerar Doação
+              </Button>
+            </Link>
+            <Link to={`${process.env.REACT_APP_PATH}/links_pagamento`}>
+              <Button
+                sx={{ color: theme.palette.text.secondary }}
+                variant="text"
+              >
+                Links de Pagamento
               </Button>
             </Link>
             <Link to={`${process.env.REACT_APP_PATH}/gerenciar_doadores`}>

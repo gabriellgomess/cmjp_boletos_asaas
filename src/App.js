@@ -19,6 +19,7 @@ import BillingManager from './Pages/BillingManager';
 import CustomerManager from './Pages/CustomerManager';
 import PageBillings from './Pages/PageBillings';
 import PageLinks from './Pages/PageLinks';
+import DadosWH from './Pages/DadosWH';
 
 // Componentes
 import Header from './Components/Header/Header';
@@ -139,6 +140,7 @@ const App = () => {
               <Route path={`${process.env.REACT_APP_PATH}/gerenciar_doadores`} element={<WithAuthentication><CustomerManager /></WithAuthentication>} />
               <Route path={`${process.env.REACT_APP_PATH}/doacoes`} element={<WithAuthentication><PageBillings /></WithAuthentication>} />
               <Route path={`${process.env.REACT_APP_PATH}/gerenciar_links`} element={<WithAuthentication><PageLinks /></WithAuthentication>} />
+              <Route path={`${process.env.REACT_APP_PATH}/estatistica`} element={<WithAuthentication><DadosWH /></WithAuthentication>} />
             </Routes>        
           </Container>
         </Box>

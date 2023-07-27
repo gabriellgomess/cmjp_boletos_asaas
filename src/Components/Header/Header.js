@@ -200,16 +200,7 @@ function Header() {
                         </Button>
                       </Link>
                     </MenuItem>
-                    <MenuItem onClick={handleCloseNavMenu}>
-                      <Link to={`${process.env.REACT_APP_PATH}/estatistica`}>
-                        <Button
-                          sx={{ color: theme.palette.text.primary }}
-                          variant="text"
-                        >
-                          Estatísticas
-                        </Button>
-                      </Link>
-                    </MenuItem>
+                  
                     {/* <MenuItem onClick={handleCloseNavMenu}>
                 <Link to={`${process.env.REACT_APP_PATH}/gerenciar_links`}>
                   <Button
@@ -289,16 +280,7 @@ function Header() {
                         Doações
                       </Button>
                     </Link>
-                    <Link
-                      to={`${process.env.REACT_APP_PATH}/estatistica`}
-                    >
-                      <Button
-                        sx={{ color: theme.palette.text.secondary }}
-                        variant="text"
-                      >
-                        Estatísticas
-                      </Button>
-                    </Link>
+                   
                     {/* <Link to={`${process.env.REACT_APP_PATH}/gerenciar_links`}>
               <Button
                 sx={{ color: theme.palette.text.secondary }}

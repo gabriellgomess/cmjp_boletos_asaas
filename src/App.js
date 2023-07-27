@@ -27,7 +27,6 @@ import BillingManager from "./Pages/BillingManager";
 import CustomerManager from "./Pages/CustomerManager";
 import PageBillings from "./Pages/PageBillings";
 import PageLinks from "./Pages/PageLinks";
-import DadosWH from "./Pages/DadosWH";
 
 // Componentes
 import Header from "./Components/Header/Header";
@@ -56,8 +55,13 @@ const darkTheme = createTheme({
       light: "#929292",
     },
     text: {
+      light: "#FFFFFF",
       primary: "#FFFFFF",
       secondary: "#e0e0e0",
+      green: "#74c3bb",
+      yellow: "#f2a243",
+      red: "#f44336",
+      blue: "#90caf9",
       success: "#81c784",
       warning: "#ffb74d",
     },
@@ -65,6 +69,9 @@ const darkTheme = createTheme({
       header: "#626262",
       paper: "#1D1F21",
       green: "#74c3bb",
+      yellow: "#f2a243",
+      red: "#f44336",
+      blue: "#90caf9",
       default: "#2c2e30",
       dark: "#444648",
     },
@@ -98,8 +105,13 @@ const lightTheme = createTheme({
       light: "#7a7a7a",
     },
     text: {
+      light: "#FFFFFF",
       primary: "#1D1F21",
       secondary: "#1D1F21",
+      green: "#74c3bb",
+      yellow: "#f2a243",
+      red: "#f44336",
+      blue: "#90caf9",
       success: "#388e3c",
       warning: "#f57c00",
     },
@@ -107,6 +119,9 @@ const lightTheme = createTheme({
       header: "#FFFFFF",
       paper: "#FFFFFF",
       green: "#74c3bb",
+      yellow: "#f2a243",
+      red: "#f44336",
+      blue: "#90caf9",
       default: "#F5F5F5",
       dark: "#e0e0e0",
     },
@@ -238,14 +253,7 @@ const App = () => {
                   </WithAuthentication>
                 }
               />
-              <Route
-                path={`${process.env.REACT_APP_PATH}/estatistica`}
-                element={
-                  <WithAuthentication>
-                    <DadosWH />
-                  </WithAuthentication>
-                }
-              />
+              
             </Routes>
           </Container>
         </Box>

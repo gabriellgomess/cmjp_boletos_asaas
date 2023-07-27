@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, ptBR } from "@mui/x-data-grid";
+import { useTheme } from "@mui/material/styles";
 import {
   Box,
   Typography,
@@ -9,6 +10,13 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  Card,
+  CardContent,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  IconButton,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -21,6 +29,8 @@ import {
   formatToCNPJ,
   formatToPhone,
 } from "brazilian-values";
+
+import swal from "sweetalert";
 
 const LinksPagamento = () => {
   const [links, setLinks] = useState([]);
@@ -35,12 +45,26 @@ const LinksPagamento = () => {
     cep: "",
     endereco: "",
     cidade: "",
-    numero: "",
+    numero_endereco: "",
     bairro: "",
     complemento: "",
-    cycle: "",
     estado: "",
   });
+  const [reload, setReload] = useState(false);
+  const theme = useTheme();
+
+  const [id, setId] = useState("");
+  const [nome, setNome] = useState("");
+  const [cpfCnpj, setCpfCnpj] = useState("");
+  const [celular, setCelular] = useState("");
+  const [email, setEmail] = useState("");
+  const [cep, setCep] = useState("");
+  const [endereco, setEndereco] = useState("");
+  const [numero_endereco, setNumeroEndereco] = useState("");
+  const [complemento, setComplemento] = useState("");
+  const [bairro, setBairro] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [estado, setEstado] = useState("");
 
   const handleOpenCreate = () => {
     setOpenCreate(true);
@@ -55,25 +79,41 @@ const LinksPagamento = () => {
       email: "",
       cep: "",
       endereco: "",
-      cidade: "",
-      numero: "",
-      bairro: "",
+      numero_endereco: "",
       complemento: "",
-      cycle: "",
+      bairro: "",
+      cidade: "",
       estado: "",
     });
   };
 
   const handleCreate = () => {
-    axios.post(`${process.env.REACT_APP_URL}/asaas.php?param=34`, newLinkData)
-    .then((response) => {
+    axios
+      .post(`${process.env.REACT_APP_URL}/asaas.php?param=34`, newLinkData)
+      .then((response) => {
         console.log(response.data);
-    })  
-    .catch((error) => {
+        swal({
+          icon: "success",
+          title: "Doador inserido com sucesso!",
+          buttons: {
+            confirm: {
+              text: "OK",
+              value: true,
+              visible: true,
+              className: "",
+              closeModal: true,
+            },
+          },
+        }).then((value) => {
+          if (value) {
+            handleCloseCreate();
+            setReload(!reload);
+          }
+        });
+      })
+      .catch((error) => {
         console.error(error);
-    })
-    handleCloseCreate();
-
+      });
   };
 
   const columns = [
@@ -91,7 +131,7 @@ const LinksPagamento = () => {
     {
       field: "celular",
       headerName: "Celular",
-      width: 110,
+      width: 140,
     },
     {
       field: "email",
@@ -99,63 +139,61 @@ const LinksPagamento = () => {
       width: 250,
       align: "left",
     },
-    {
-      field: "endereco",
-      headerName: "Endereço",
-      width: 400,
-      align: "left",
-      renderCell: (params) => (
-        <Typography variant="body1" color="text.secondary" component="div">
-          {params.row.endereco}, {params.row.numero_endereco},{" "}
-          {params.row.bairro}, {params.row.cidade}, {params.row.estado}
-        </Typography>
-      ),
-    },
-    {
-      field: "cycle",
-      headerName: "Ciclo",
-      width: 150,
-      align: "center",
-      renderCell: (params) => (
-        <Typography variant="body1" color="text.secondary" component="div">
-          {params.row.cycle === "MONTHLY" ? "Mensal" : ""}
-        </Typography>
-      ),
-    },
-    {
-      field: "customerID",
-      headerName: "ID do Doador",
-      width: 250,
-      align: "left",
-    },
+    // {
+    //   field: "endereco",
+    //   headerName: "Endereço",
+    //   width: 400,
+    //   align: "left",
+    //   renderCell: (params) => (
+    //     <Typography variant="body1" color="text.secondary" component="div">
+    //       {params.row.endereco}, {params.row.numero_endereco},{" "}
+    //       {params.row.bairro}, {params.row.cidade}, {params.row.estado}
+    //     </Typography>
+    //   ),
+    // },
+
+    // {
+    //   field: "customerID",
+    //   headerName: "ID do Doador",
+    //   width: 150,
+    //   align: "left",
+    // },
     {
       field: "actions",
       headerName: "Ações",
-      width: 200,
+      width: 100,
       renderCell: (params) => (
         <Box sx={{ display: "flex", gap: "10px" }}>
-          <Button
-            onClick={() => handleOpen(params.row)}
-            color="secondary"
-            variant="contained"
-          >
+          <IconButton onClick={() => handleOpen(params.row)} color="secondary">
             <EditIcon />
-          </Button>
-          <Button
+          </IconButton>
+          <IconButton
             onClick={() => handleDelete(params.row.id)}
             color="primary"
-            variant="contained"
           >
             <DeleteIcon />
-          </Button>
+          </IconButton>
         </Box>
       ),
     },
   ];
 
   const handleOpen = (data) => {
+    console.log(data);
     setOpen(true);
     setEditData(data);
+    setId(data.id);
+    setNome(data.nome);
+    setCpfCnpj(data.cpf_cnpj);
+    setCelular(data.celular);
+    setEmail(data.email);
+    setCep(data.cep);
+    setEndereco(data.endereco);
+    setNumeroEndereco(data.numero_endereco);
+    setComplemento(data.complemento);
+    setBairro(data.bairro);
+    setCidade(data.cidade);
+    setEstado(data.estado);
   };
 
   const handleClose = () => {
@@ -164,8 +202,27 @@ const LinksPagamento = () => {
 
   const handleDelete = (id) => {
     // chamar a API para deletar a linha baseado no id
-    axios.post(`${process.env.REACT_APP_URL}/asaas.php?param=32&id=${id}`);
-    console.log("Deletar linha com id: ", id);
+    axios.post(`${process.env.REACT_APP_URL}/asaas.php?param=33&id=${id}`)
+    .then((response) => {
+      console.log(response.data);
+      swal({
+        icon: "success",
+        title: "Doador excluído!",
+        buttons: {
+          confirm: {
+            text: "OK",
+            value: true,
+            visible: true,
+            className: "",
+            closeModal: true,
+          },
+        },
+      }).then((value) => {
+        if (value) {
+          setReload(!reload);
+        }
+      });
+    })    
   };
 
   useEffect(() => {
@@ -178,7 +235,7 @@ const LinksPagamento = () => {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [reload]);
 
   const validateCPF = (cpf) => {
     if (!isCPF(cpf)) {
@@ -232,7 +289,15 @@ const LinksPagamento = () => {
 
   return (
     <Box>
-      <Box sx={{ display: "flex", justifyContent: "end", margin: "15px 0" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          margin: "15px 0",
+          flexWrap: "wrap",
+        }}
+      >
+        <Typography variant="h4">Links de Pagamento</Typography>
         <Button
           variant="contained"
           color="success"
@@ -242,7 +307,24 @@ const LinksPagamento = () => {
           Adicionar link
         </Button>
       </Box>
+      <Card
+        sx={{ bgColor: theme.palette.background.paper, marginBottom: "10px" }}
+      >
+        <CardContent>
+          <Typography variant="body1" color="text.secondary" component="div">
+            Para os doadores cadastrados nesta tabela, será gerado um link de
+            pagamento a cada dia 21 do mês e será enviado para o e-mail
+            cadastrado.
+          </Typography>
+          <Typography variant="body1" color="text.secondary" component="div">
+            Com este link o doador escolhe o valor que deseja doar e a forma de
+            pagamento.
+          </Typography>
+        </CardContent>
+      </Card>
+
       <DataGrid
+        localeText={ptBR.components.MuiDataGrid.defaultProps.localeText}
         rows={links}
         columns={columns}
         initialState={{
@@ -282,8 +364,6 @@ const LinksPagamento = () => {
               value={newLinkData.cpf_cnpj}
               onChange={handleChangeCPForCNPJ}
             />
-          </Box>
-          <Box sx={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
             <TextField
               sx={{ width: { xs: "100%", sm: "29%" } }}
               margin="dense"
@@ -300,43 +380,40 @@ const LinksPagamento = () => {
                 setNewLinkData({ ...newLinkData, email: e.target.value })
               }
             />
-          </Box>
-          <Box sx={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+            <Box sx={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+              <TextField
+                sx={{ width: { xs: "100%", sm: "50%" } }}
+                margin="dense"
+                label="CEP"
+                onKeyUp={(e) => handleChangeCEP(e.target.value)}
+                onChange={(e) =>
+                  setNewLinkData({ ...newLinkData, cep: e.target.value })
+                }
+              />
+            </Box>
             <TextField
-              sx={{ width: { xs: "100%", sm: "50%" } }}
+              sx={{ width: { xs: "100%", sm: "69%" } }}
               margin="dense"
-              label="CEP"
-              onKeyUp={(e) => handleChangeCEP(e.target.value)}
+              label="Endereço"
+              value={newLinkData.endereco}
               onChange={(e) =>
-                setNewLinkData({ ...newLinkData, cep: e.target.value })
+                setNewLinkData({ ...newLinkData, endereco: e.target.value })
               }
             />
-          </Box>
-
-          <TextField
-            margin="dense"
-            label="Rua/Avenida"
-            value={newLinkData.endereco}
-            fullWidth
-            InputProps={{
-              readOnly: true,
-            }}
-            InputLabelProps={
-              newLinkData.endereco != null ? { shrink: true } : {}
-            }
-          />
-          <Box sx={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
             <TextField
-              sx={{ width: { xs: "100%", sm: "49%" } }}
+              sx={{ width: { xs: "100%", sm: "29%" } }}
               margin="dense"
               label="Número"
-              value={newLinkData.numero}
+              value={newLinkData.numero_endereco}
               onChange={(e) =>
-                setNewLinkData({ ...newLinkData, numero: e.target.value })
+                setNewLinkData({
+                  ...newLinkData,
+                  numero_endereco: e.target.value,
+                })
               }
             />
             <TextField
-              sx={{ width: { xs: "100%", sm: "49%" } }}
+              sx={{ width: { xs: "100%", sm: "69%" } }}
               margin="dense"
               label="Complemento"
               value={newLinkData.complemento}
@@ -344,56 +421,62 @@ const LinksPagamento = () => {
                 setNewLinkData({ ...newLinkData, complemento: e.target.value })
               }
             />
-          </Box>
-          <Box sx={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
             <TextField
-              sx={{ width: { xs: "100%", sm: "49%" } }}
+              sx={{ width: { xs: "100%", sm: "29%" } }}
               margin="dense"
               label="Bairro"
               value={newLinkData.bairro}
-              InputProps={{
-                readOnly: true,
-              }}
-              InputLabelProps={
-                newLinkData.bairro != null ? { shrink: true } : {}
+              onChange={(e) =>
+                setNewLinkData({ ...newLinkData, bairro: e.target.value })
               }
             />
             <TextField
-              sx={{ width: { xs: "100%", sm: "49%" } }}
+              sx={{ width: { xs: "100%", sm: "69%" } }}
               margin="dense"
               label="Cidade"
               value={newLinkData.cidade}
-              InputProps={{
-                readOnly: true,
-              }}
-              InputLabelProps={
-                newLinkData.cidade != null ? { shrink: true } : {}
-              }
-            />
-          </Box>
-          <Box sx={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-            <TextField
-              sx={{ width: { xs: "100%", sm: "49%" } }}
-              margin="dense"
-              label="Estado"
-              value={newLinkData.estado}
-              InputProps={{
-                readOnly: true,
-              }}
-              InputLabelProps={
-                newLinkData.estado != null ? { shrink: true } : {}
-              }
-            />
-            <TextField
-              sx={{ width: { xs: "100%", sm: "49%" } }}
-              margin="dense"
-              label="Ciclo"
-              value={newLinkData.cycle}
               onChange={(e) =>
-                setNewLinkData({ ...newLinkData, cycle: e.target.value })
+                setNewLinkData({ ...newLinkData, cidade: e.target.value })
               }
             />
           </Box>
+          <FormControl fullWidth margin="dense">
+            <InputLabel>Estado</InputLabel>
+            <Select
+              value={newLinkData.estado}
+              onChange={(e) =>
+                setNewLinkData({ ...newLinkData, estado: e.target.value })
+              }
+            >
+              <MenuItem value="AC">Acre</MenuItem>
+              <MenuItem value="AL">Alagoas</MenuItem>
+              <MenuItem value="AP">Amapá</MenuItem>
+              <MenuItem value="AM">Amazonas</MenuItem>
+              <MenuItem value="BA">Bahia</MenuItem>
+              <MenuItem value="CE">Ceará</MenuItem>
+              <MenuItem value="DF">Distrito Federal</MenuItem>
+              <MenuItem value="ES">Espírito Santo</MenuItem>
+              <MenuItem value="GO">Goiás</MenuItem>
+              <MenuItem value="MA">Maranhão</MenuItem>
+              <MenuItem value="MT">Mato Grosso</MenuItem>
+              <MenuItem value="MS">Mato Grosso do Sul</MenuItem>
+              <MenuItem value="MG">Minas Gerais</MenuItem>
+              <MenuItem value="PA">Pará</MenuItem>
+              <MenuItem value="PB">Paraíba</MenuItem>
+              <MenuItem value="PR">Paraná</MenuItem>
+              <MenuItem value="PE">Pernambuco</MenuItem>
+              <MenuItem value="PI">Piauí</MenuItem>
+              <MenuItem value="RJ">Rio de Janeiro</MenuItem>
+              <MenuItem value="RN">Rio Grande do Norte</MenuItem>
+              <MenuItem value="RS">Rio Grande do Sul</MenuItem>
+              <MenuItem value="RO">Rondônia</MenuItem>
+              <MenuItem value="RR">Roraima</MenuItem>
+              <MenuItem value="SC">Santa Catarina</MenuItem>
+              <MenuItem value="SP">São Paulo</MenuItem>
+              <MenuItem value="SE">Sergipe</MenuItem>
+              <MenuItem value="TO">Tocantins</MenuItem>
+            </Select>
+          </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseCreate}>Cancelar</Button>
@@ -407,52 +490,155 @@ const LinksPagamento = () => {
           <TextField
             margin="dense"
             label="Nome"
-            value={editData?.nome}
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
             fullWidth
           />
           <TextField
             margin="dense"
             label="CPF/CNPJ"
-            value={editData?.cpf_cnpj}
+            value={cpfCnpj}
+            onChange={(e) => setCpfCnpj(e.target.value)}
             fullWidth
           />
           <TextField
             margin="dense"
             label="Celular"
-            value={editData?.celular}
+            value={celular}
+            onChange={(e) => setCelular(e.target.value)}
             fullWidth
           />
           <TextField
             margin="dense"
             label="E-mail"
-            value={editData?.email}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            fullWidth
+          />
+          <TextField
+            margin="dense"
+            label="CEP"
+            value={cep}
+            onChange={(e) => setCep(e.target.value)}
             fullWidth
           />
           <TextField
             margin="dense"
             label="Endereço"
-            value={editData?.endereco}
+            value={endereco}
+            onChange={(e) => setEndereco(e.target.value)}
             fullWidth
           />
           <TextField
             margin="dense"
-            label="Ciclo"
-            value={editData?.cycle}
+            label="Número"
+            value={numero_endereco}
+            onChange={(e) => setNumeroEndereco(e.target.value)}
             fullWidth
           />
           <TextField
             margin="dense"
-            label="ID do Doador"
-            value={editData?.customerID}
+            label="Complemento"
+            value={complemento}
+            onChange={(e) => setComplemento(e.target.value)}
             fullWidth
           />
+          <TextField
+            margin="dense"
+            label="Bairro"
+            value={bairro}
+            onChange={(e) => setBairro(e.target.value)}
+            fullWidth
+          />
+          <TextField
+            margin="dense"
+            label="Cidade"
+            value={cidade}
+            onChange={(e) => setCidade(e.target.value)}
+            fullWidth
+          />
+          <FormControl fullWidth margin="dense">
+            <InputLabel>Estado</InputLabel>
+            <Select value={estado} onChange={(e) => setEstado(e.target.value)}>
+              <MenuItem value="AC">Acre</MenuItem>
+              <MenuItem value="AL">Alagoas</MenuItem>
+              <MenuItem value="AP">Amapá</MenuItem>
+              <MenuItem value="AM">Amazonas</MenuItem>
+              <MenuItem value="BA">Bahia</MenuItem>
+              <MenuItem value="CE">Ceará</MenuItem>
+              <MenuItem value="DF">Distrito Federal</MenuItem>
+              <MenuItem value="ES">Espírito Santo</MenuItem>
+              <MenuItem value="GO">Goiás</MenuItem>
+              <MenuItem value="MA">Maranhão</MenuItem>
+              <MenuItem value="MT">Mato Grosso</MenuItem>
+              <MenuItem value="MS">Mato Grosso do Sul</MenuItem>
+              <MenuItem value="MG">Minas Gerais</MenuItem>
+              <MenuItem value="PA">Pará</MenuItem>
+              <MenuItem value="PB">Paraíba</MenuItem>
+              <MenuItem value="PR">Paraná</MenuItem>
+              <MenuItem value="PE">Pernambuco</MenuItem>
+              <MenuItem value="PI">Piauí</MenuItem>
+              <MenuItem value="RJ">Rio de Janeiro</MenuItem>
+              <MenuItem value="RN">Rio Grande do Norte</MenuItem>
+              <MenuItem value="RS">Rio Grande do Sul</MenuItem>
+              <MenuItem value="RO">Rondônia</MenuItem>
+              <MenuItem value="RR">Roraima</MenuItem>
+              <MenuItem value="SC">Santa Catarina</MenuItem>
+              <MenuItem value="SP">São Paulo</MenuItem>
+              <MenuItem value="SE">Sergipe</MenuItem>
+              <MenuItem value="TO">Tocantins</MenuItem>
+            </Select>
+          </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
           <Button
             onClick={() => {
-              console.log(editData);
-              handleClose();
+              const updatedData = {
+                id,
+                nome,
+                cpf_cnpj: cpfCnpj,
+                celular,
+                email,
+                cep,
+                endereco,
+                numero_endereco,
+                complemento,
+                bairro,
+                cidade,
+                estado,
+              };
+              axios
+                .post(
+                  `${process.env.REACT_APP_URL}/asaas.php?param=32`,
+                  updatedData
+                )
+                .then((response) => {
+                  console.log(response.data);
+                  swal({
+                    icon: "success",
+                    title: "Dados do doador editados com sucesso!",
+                    buttons: {
+                      confirm: {
+                        text: "OK",
+                        value: true,
+                        visible: true,
+                        className: "",
+                        closeModal: true,
+                      },
+                    },
+                  }).then((value) => {
+                    if (value) {
+                      setReload(!reload);
+                      handleClose();
+                    }
+                  });
+                  
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
+              
             }}
           >
             Salvar

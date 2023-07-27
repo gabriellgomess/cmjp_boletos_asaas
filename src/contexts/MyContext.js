@@ -5,7 +5,8 @@ export const MyContext = createContext();
 
 // Define the base URL
 const Axios = axios.create({
-  baseURL: "https://amigosdacasa.org.br/gerenciador-doacoes-amigosdacasa/login/",
+  baseURL:
+    "https://amigosdacasa.org.br/gerenciador-doacoes-amigosdacasa/login/",
 });
 
 const MyContextProvider = ({ children }) => {
@@ -20,7 +21,9 @@ const MyContextProvider = ({ children }) => {
   }, []);
 
   const fetchCustomers = async () => {
-    const response = await axios.get(`${process.env.REACT_APP_URL}/asaas.php?param=29`);
+    const response = await axios.get(
+      `${process.env.REACT_APP_URL}/asaas.php?param=29`
+    );
     if (response.data && response.data.data) {
       setCustomers(response.data.data);
     }
@@ -75,9 +78,7 @@ const MyContextProvider = ({ children }) => {
   };
 
   return (
-    <MyContext.Provider value={contextValue}>
-      {children}
-    </MyContext.Provider>
+    <MyContext.Provider value={contextValue}>{children}</MyContext.Provider>
   );
 };
 

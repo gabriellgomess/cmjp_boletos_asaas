@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { Box, Card, CardContent, Typography, IconButton } from "@mui/material";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useTheme } from "@mui/material/styles";
 import Chart from "react-apexcharts";
 
@@ -25,6 +27,11 @@ const DadosFinanceiros = () => {
   const [values, setValues] = useState([]);
   const [displayBalance, setDisplayBalance] = useState(0);
   const theme = useTheme();
+  const [balanceVisible, setBalanceVisible] = useState(false);
+
+  const handleVisibilityToggle = () => {
+    setBalanceVisible(!balanceVisible);
+  };
 
   const statusColors = {
     PENDING: theme.palette.background.yellow,
@@ -78,7 +85,13 @@ const DadosFinanceiros = () => {
   }, [balance]);
 
   const valueList = values.map((value, index) => (
-    <Card key={index} sx={{ backgroundColor: statusColors[value.status], width: {xs: '48%', sm: '48%', md: '30%', lg: '22%'} }}>
+    <Card
+      key={index}
+      sx={{
+        backgroundColor: statusColors[value.status],
+        width: { xs: "48%", sm: "48%", md: "30%", lg: "22%" },
+      }}
+    >
       <CardContent>
         <Typography
           gutterBottom
@@ -120,7 +133,7 @@ const DadosFinanceiros = () => {
       legend: {
         position: "top",
         labels: {
-          colors: [theme.palette.text.primary]
+          colors: [theme.palette.text.primary],
         },
       },
       responsive: [
@@ -128,9 +141,8 @@ const DadosFinanceiros = () => {
           breakpoint: 480,
           options: {
             chart: {
-              width: '100%',
+              width: "100%",
             },
-           
           },
         },
       ],
@@ -138,7 +150,14 @@ const DadosFinanceiros = () => {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: "20px", width: {xs: '100%', sm: '100%', md: '50%'} }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "20px",
+        width: { xs: "100%", sm: "100%", md: "50%" },
+      }}
+    >
       <Card
         sx={{
           width: "100%",
@@ -147,19 +166,33 @@ const DadosFinanceiros = () => {
       >
         <CardContent>
           <MonetizationOnIcon />
-          <Typography variant="h3" color={theme.palette.text.green}>
-            {displayBalance.toLocaleString("pt-br", {
-              style: "currency",
-              currency: "BRL",
-            })}
+          <Typography variant="h3" color="text.green">
+            {balanceVisible
+              ? displayBalance.toLocaleString("pt-br", {
+                  style: "currency",
+                  currency: "BRL",
+                })
+              : "***********"}
           </Typography>
           <Typography variant="h5" color="text.secondary">
             Saldo atual
           </Typography>
+          <IconButton onClick={handleVisibilityToggle}>
+            {balanceVisible ? <VisibilityOffIcon /> : <VisibilityIcon />}
+          </IconButton>
         </CardContent>
       </Card>
-      <Box sx={{ display: "flex", flexWrap: 'wrap', justifyContent: 'center', gap: "10px" }}>{valueList}</Box>
-      <Box sx={{width: '100%'}}>
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          gap: "10px",
+        }}
+      >
+        {valueList}
+      </Box>
+      <Box sx={{ width: "100%" }}>
         <Chart
           options={pieChartData.options}
           series={pieChartData.series}

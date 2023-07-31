@@ -5,7 +5,8 @@ import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useTheme } from "@mui/material/styles";
-import Chart from "react-apexcharts";
+import PieChart from "../Chart/PieChart";
+import BarChart from "../Chart/BarChart";
 
 const fetchBalance = async () => {
   const response = await axios.get(
@@ -61,22 +62,18 @@ const DadosFinanceiros = () => {
   }, []);
 
   useEffect(() => {
-    // Garante que não há mais de um contador funcionando ao mesmo tempo
     let intervalId = null;
 
     if (balance > displayBalance) {
-      // Inicia o contador se o valor do saldo for maior que o saldo exibido
       intervalId = setInterval(() => {
         setDisplayBalance((prev) => Math.min(prev + 100, balance));
-      }, 1); // Ajuste o intervalo de acordo com a rapidez com que deseja contar
+      }, 1);
     } else if (balance < displayBalance) {
-      // Reduz o contador se o saldo for menor que o saldo exibido
       intervalId = setInterval(() => {
         setDisplayBalance((prev) => Math.max(prev - 1, balance));
-      }, 1); // Ajuste o intervalo de acordo com a rapidez com que deseja contar
+      }, 1);
     }
 
-    // Limpa o intervalo quando o componente é desmontado ou o saldo muda
     return () => {
       if (intervalId) {
         clearInterval(intervalId);
@@ -89,7 +86,7 @@ const DadosFinanceiros = () => {
       key={index}
       sx={{
         backgroundColor: statusColors[value.status],
-        width: { xs: "48%", sm: "48%", md: "30%", lg: "22%" },
+        width: { xs: "100%", sm: "100%", md: "150px", lg: "150px" },
       }}
     >
       <CardContent>
@@ -118,86 +115,59 @@ const DadosFinanceiros = () => {
     </Card>
   ));
 
-  // We create a new array excluding the "" type, for the pie chart.
-  const chartValues = values.filter((value) => value.status !== "");
-
-  const pieChartData = {
-    series: chartValues.map((value) => value.value),
-    options: {
-      labels: chartValues.map((value) => statusTranslations[value.status]),
-      colors: [
-        theme.palette.background.green,
-        theme.palette.background.yellow,
-        theme.palette.background.red,
-      ],
-      legend: {
-        position: "top",
-        labels: {
-          colors: [theme.palette.text.primary],
-        },
-      },
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: "100%",
-            },
-          },
-        },
-      ],
-    },
-  };
-
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "20px",
-        width: { xs: "100%", sm: "100%", md: "50%" },
-      }}
-    >
-      <Card
-        sx={{
-          width: "100%",
-          margin: { xs: "20px auto", sm: "20px 0", md: "20px 0" },
-        }}
-      >
-        <CardContent>
-          <MonetizationOnIcon />
-          <Typography variant="h3" color="text.green">
-            {balanceVisible
-              ? displayBalance.toLocaleString("pt-br", {
-                  style: "currency",
-                  currency: "BRL",
-                })
-              : "***********"}
-          </Typography>
-          <Typography variant="h5" color="text.secondary">
-            Saldo atual
-          </Typography>
-          <IconButton onClick={handleVisibilityToggle}>
-            {balanceVisible ? <VisibilityOffIcon /> : <VisibilityIcon />}
-          </IconButton>
-        </CardContent>
-      </Card>
+    <Box sx={{display: 'flex', flexDirection: 'column', width: '100%'}}>
       <Box
         sx={{
           display: "flex",
           flexWrap: "wrap",
-          justifyContent: "center",
-          gap: "10px",
+          width: { xs: "100%", sm: "100%", md: "100%" },
         }}
       >
-        {valueList}
+        <Card
+          sx={{
+            width: { xs: "100%", sm: "100%", md: "40%"},
+            margin: { xs: "20px auto", sm: "20px 0", md: "20px 0" },
+          }}
+        >
+          <CardContent>
+            <MonetizationOnIcon />
+            <Typography variant="h3" color="text.green">
+              {balanceVisible
+                ? displayBalance.toLocaleString("pt-br", {
+                    style: "currency",
+                    currency: "BRL",
+                  })
+                : "***********"}
+            </Typography>
+            <Typography variant="h5" color="text.secondary">
+              Saldo atual
+            </Typography>
+            <IconButton onClick={handleVisibilityToggle}>
+              {balanceVisible ? <VisibilityOffIcon /> : <VisibilityIcon />}
+            </IconButton>
+          </CardContent>
+        </Card>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "10px",
+            width: { xs: "100%", sm: "100%", md: "60%" },
+          }}
+        >
+          {valueList}
+        </Box>
       </Box>
-      <Box sx={{ width: "100%" }}>
-        <Chart
-          options={pieChartData.options}
-          series={pieChartData.series}
-          type="pie"
-        />
+      <Box sx={{ width: "100%", margin: "20px 0", display: 'flex', flexWrap: 'wrap' }}>
+        <Box sx={{ width: {xs: '100%', sm: '100%', md: '50%'}, minWidth: '330px' }}>
+          <BarChart />
+        </Box>
+        <Box sx={{ width: {xs: '100%', sm: '100%', md: '50%'}, minWidth: '330px' }}>
+          <PieChart />
+        </Box>
       </Box>
     </Box>
   );

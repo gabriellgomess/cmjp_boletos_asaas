@@ -32,6 +32,7 @@ import PageLinks from "./Pages/PageLinks";
 import Header from "./Components/Header/Header";
 import Footer from "./Components/Footer/Footer";
 import Home from "./Components/Home";
+import ExtratoConta from "./Pages/ExtratoConta";
 
 function WithAuthentication({ children }) {
   const { rootState } = useContext(MyContext);
@@ -250,6 +251,14 @@ const App = () => {
                 element={
                   <WithAuthentication>
                     <PageLinks />
+                  </WithAuthentication>
+                }
+              />
+              <Route
+                path={`${process.env.REACT_APP_PATH}/extrato`}
+                element={                  
+                  <WithAuthentication>
+                    <ExtratoConta />
                   </WithAuthentication>
                 }
               />

@@ -1,30 +1,14 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Container, Typography, Box, Card, CardContent } from "@mui/material";
+import { Card, CardContent } from "@mui/material";
 import Chart from "react-apexcharts";
+import axios from "axios";
 import collect from "collect.js";
 import { useTheme } from "@mui/material/styles";
 
-import DadosFinanceiros from "../DadosFInanceiros/DadosFinanceiros";
-
-const DadosWebHook = () => {
-  const [data, setData] = useState([]);
-  const [totalPayments, setTotalPayments] = useState(0);
-  const [pendingPayments, setPendingPayments] = useState(0);
-  const [receivedPayments, setReceivedPayments] = useState(0);
-  const [overduePayments, setOverduePayments] = useState(0);
-  const [totalValue, setTotalValue] = useState(0);
-  const [totalNetValue, setTotalNetValue] = useState(0);
-  const [pieChartData, setPieChartData] = useState({ options: {}, series: [] });
+const BarChart = () => {
   const [barChartData, setBarChartData] = useState({ options: {}, series: [] });
 
   const theme = useTheme();
-
-  const currencyFormatter = new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  });
-
   const dateFormatter = new Intl.DateTimeFormat("pt-BR");
 
   useEffect(() => {
@@ -32,52 +16,6 @@ const DadosWebHook = () => {
       const result = await axios(
         `${process.env.REACT_APP_URL}/asaas.php?param=35`
       );
-      setData(result.data);
-
-      // calcular estatísticas
-      setTotalPayments(result.data.length);
-      setPendingPayments(
-        result.data.filter((item) => item.status === "PENDING").length
-      );
-      setReceivedPayments(
-        result.data.filter((item) => item.status === "RECEIVED").length
-      );
-      setTotalValue(
-        result.data.reduce((sum, item) => sum + parseFloat(item.value), 0)
-      );
-      setOverduePayments(
-        result.data.filter((item) => item.status === "OVERDUE").length
-      );
-      setTotalNetValue(
-        result.data.reduce((sum, item) => sum + parseFloat(item.netValue), 0)
-      );
-
-      // definir dados do gráfico de pizza
-      setPieChartData({
-        options: {
-          labels: [
-            "Pagamentos Pendentes",
-            "Pagamentos Recebidos",
-            "Pagamentos Atrasados",
-          ],
-          colors: ["#f2a243", "#74c3bb", "#e9434b"],
-          responsive: [
-            {
-              breakpoint: 480,
-              options: {
-                legend: {
-                  position: "bottom",
-                },
-              },
-            },
-          ],
-        },
-        series: [
-          result.data.filter((item) => item.status === "PENDING").length,
-          result.data.filter((item) => item.status === "RECEIVED").length,
-          result.data.filter((item) => item.status === "OVERDUE").length,
-        ],
-      });
 
       // agrupar pagamentos recebidos por data usando collect.js
       const paymentsCollection = collect(
@@ -85,10 +23,11 @@ const DadosWebHook = () => {
       );
 
       let maxDate = new Date(Math.max.apply(null, result.data.map(e => new Date(e.paymentDate))));
+      let minDate = new Date(maxDate);
+      minDate.setDate(minDate.getDate() - 5);
+      
 
-      maxDate.setDate(maxDate.getDate() - 7);
-
-      const recentPayments = paymentsCollection.where('paymentDate', '>=', maxDate.toISOString().split('T')[0]);
+      const recentPayments = paymentsCollection.where('paymentDate', '>=', minDate.toISOString().split('T')[0]);
 
       const paymentsByDate = recentPayments
         .groupBy((item) => {
@@ -103,8 +42,19 @@ const DadosWebHook = () => {
         })
         .map((item) => item.sum((item) => parseFloat(item.value)));
 
-      const dates = paymentsByDate.keys().all();
-      const counts = paymentsByDate.values().all();
+      // Cria um objeto com a estrutura { 'date': value }, com todos os valores inicializados como 0
+      let completeData = {};
+      for (let d = new Date(minDate); d <= maxDate; d.setDate(d.getDate() + 1)) {
+        completeData[dateFormatter.format(d)] = 0;
+      }
+
+      // Sobreponha os valores recebidos aos valores iniciais
+      for (const [date, value] of Object.entries(paymentsByDate.all())) {
+        completeData[date] = value;
+      }
+
+      const dates = Object.keys(completeData);
+      const counts = Object.values(completeData);
 
       // calcular a média dos valores
       const averageValue =
@@ -199,36 +149,13 @@ const DadosWebHook = () => {
   }, [theme.palette.text.primary]);
 
   return (
-    <Box sx={{ width: "100%"}}>
-      <Typography variant="h5">Estatísticas do Pagamento</Typography>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap"
-        }}
-      >
-        <DadosFinanceiros />
-        {/* <Card
-          sx={{
-            width: { xs: "100%", sm: "100%", md: "48%" },
-            minWidth: "200px",
-          }}
-        >
-          <CardContent>
-            <Chart
-              options={barChartData.options}
-              series={barChartData.series}
-              type="bar"
-              height={350}
-            />
-          </CardContent>
-        </Card> */}
-      </Box>
-     
-    </Box>
+    <Chart
+      options={barChartData.options}
+      series={barChartData.series}
+      type="bar"
+      height={350}
+    />
   );
 };
 
-export default DadosWebHook;
+export default BarChart;

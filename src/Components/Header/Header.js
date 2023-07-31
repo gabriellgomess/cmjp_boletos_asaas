@@ -4,8 +4,6 @@ import { MyContext } from "../../contexts/MyContext";
 import React, { useState, useContext } from "react";
 import {
   AppBar,
-  Card,
-  CardContent,
   Box,
   Toolbar,
   IconButton,
@@ -24,10 +22,20 @@ import Logo from "../../assets/img/logo_horizontal_cmjp.png";
 import LogoHorizontal from "../../assets/img/logotipo_amc.png";
 import LogoLG from "../../assets/img/logotipo_amc_lg.png";
 
+const menuItems = [
+  { path: "", label: "Dashboard" },
+  { path: "/form_cadastro", label: "Cadastrar Doador" },
+  { path: "/gerar_cobranca", label: "Gerar Doação" },
+  { path: "/links_pagamento", label: "Links de Pagamento" },
+  { path: "/gerenciar_doadores", label: "Gerenciar Doadores" },
+  { path: "/doacoes", label: "Doações" },
+  { path: "/extrato", label: "Extrato da conta" },
+];
+
 function Header() {
   const theme = useTheme();
   const { rootState, logoutUser } = useContext(MyContext);
-  const { isAuth, theUser } = rootState;
+  const { isAuth } = rootState;
 
   const [anchorElNav, setAnchorElNav] = useState(null);
 
@@ -101,13 +109,6 @@ function Header() {
                   >
                     <MenuIcon />
                   </IconButton>
-                  <IconButton
-                    onClick={logoutUser}
-                    aria-label="delete"
-                    size="large"
-                  >
-                    <LogoutIcon fontSize="inherit" />
-                  </IconButton>
                   <Menu
                     id="menu-appbar"
                     anchorEl={anchorElNav}
@@ -126,91 +127,18 @@ function Header() {
                       display: { xs: "block", md: "none" },
                     }}
                   >
-                    <MenuItem onClick={handleCloseNavMenu}>
-                      <Link to={`${process.env.REACT_APP_PATH}`}>
-                        <Button
-                          sx={{ color: theme.palette.text.primary }}
-                          variant="text"
-                        >
-                          Dashboard
-                        </Button>
-                      </Link>
-                    </MenuItem>
-                    <MenuItem onClick={handleCloseNavMenu}>
-                      <Link to={`${process.env.REACT_APP_PATH}/form_cadastro`}>
-                        <Button
-                          sx={{ color: theme.palette.text.primary }}
-                          variant="text"
-                        >
-                          Cadastrar Doador
-                        </Button>
-                      </Link>
-                    </MenuItem>
-                    <MenuItem onClick={handleCloseNavMenu}>
-                      <Link to={`${process.env.REACT_APP_PATH}/gerar_cobranca`}>
-                        <Button
-                          sx={{ color: theme.palette.text.primary }}
-                          variant="text"
-                        >
-                          Gerar Doação
-                        </Button>
-                      </Link>
-                    </MenuItem>
-                    <MenuItem onClick={handleCloseNavMenu}>
-                      <Link
-                        to={`${process.env.REACT_APP_PATH}/links_pagamento`}
-                      >
-                        <Button
-                          sx={{ color: theme.palette.text.primary }}
-                          variant="text"
-                        >
-                          Links de Pagamento
-                        </Button>
-                      </Link>
-                    </MenuItem>
-                    <MenuItem onClick={handleCloseNavMenu}>
-                      <Link
-                        to={`${process.env.REACT_APP_PATH}/gerenciar_doadores`}
-                      >
-                        <Button
-                          sx={{ color: theme.palette.text.primary }}
-                          variant="text"
-                        >
-                          Gerenciar Doadores
-                        </Button>
-                      </Link>
-                    </MenuItem>
-                    {/* <MenuItem onClick={handleCloseNavMenu}>
-                <Link to={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`}>
-                  <Button
-                    sx={{ color: theme.palette.text.primary }}
-                    variant="text"
-                  >
-                    Recorrentes
-                  </Button>
-                </Link>
-              </MenuItem> */}
-                    <MenuItem onClick={handleCloseNavMenu}>
-                      <Link to={`${process.env.REACT_APP_PATH}/doacoes`}>
-                        <Button
-                          sx={{ color: theme.palette.text.primary }}
-                          variant="text"
-                        >
-                          Doações
-                        </Button>
-                      </Link>
-                    </MenuItem>
-                  
-                    {/* <MenuItem onClick={handleCloseNavMenu}>
-                <Link to={`${process.env.REACT_APP_PATH}/gerenciar_links`}>
-                  <Button
-                    sx={{ color: theme.palette.text.primary }}
-                    variant="text"
-                  >
-                    Links de Pagamento
-                  </Button>
-                </Link>
-              </MenuItem>               */}
+                    {menuItems.map((item) => (
+                      <MenuItem key={item.label} onClick={handleCloseNavMenu}>
+                        <Link to={`${process.env.REACT_APP_PATH}${item.path}`}>
+                          <Button
+                            sx={{ color: theme.palette.text.primary }}
+                            variant="text"
+                          >
+                            {item.label}
+                          </Button>
+                        </Link>
+                      </MenuItem>
+                    ))}
                   </Menu>
                 </Box>
                 <Box
@@ -222,82 +150,28 @@ function Header() {
                   }}
                 >
                   <Box>
-                    <Link to={`${process.env.REACT_APP_PATH}`}>
-                      <Button
-                        sx={{ color: theme.palette.text.secondary }}
-                        variant="text"
+                    {menuItems.map((item) => (
+                      <Link
+                        key={item.label}
+                        to={`${process.env.REACT_APP_PATH}${item.path}`}
                       >
-                        Dashboard
-                      </Button>
-                    </Link>
-                    <Link to={`${process.env.REACT_APP_PATH}/form_cadastro`}>
-                      <Button
-                        sx={{ color: theme.palette.text.secondary }}
-                        variant="text"
-                      >
-                        Cadastrar Doador
-                      </Button>
-                    </Link>
-                    <Link to={`${process.env.REACT_APP_PATH}/gerar_cobranca`}>
-                      <Button
-                        sx={{ color: theme.palette.text.secondary }}
-                        variant="text"
-                      >
-                        Gerar Doação
-                      </Button>
-                    </Link>
-                    <Link to={`${process.env.REACT_APP_PATH}/links_pagamento`}>
-                      <Button
-                        sx={{ color: theme.palette.text.secondary }}
-                        variant="text"
-                      >
-                        Links de Pagamento
-                      </Button>
-                    </Link>
-                    <Link
-                      to={`${process.env.REACT_APP_PATH}/gerenciar_doadores`}
-                    >
-                      <Button
-                        sx={{ color: theme.palette.text.secondary }}
-                        variant="text"
-                      >
-                        Gerenciar Doadores
-                      </Button>
-                    </Link>                    
-                    {/* <Link to={`${process.env.REACT_APP_PATH}/cobrancas_recorrentes`}>
-              <Button
-                sx={{ color: theme.palette.text.secondary }}
-                variant="text"
-              >
-                Recorrentes
-              </Button>
-            </Link> */}
-                    <Link to={`${process.env.REACT_APP_PATH}/doacoes`}>
-                      <Button
-                        sx={{ color: theme.palette.text.secondary }}
-                        variant="text"
-                      >
-                        Doações
-                      </Button>
-                    </Link>
-                   
-                    {/* <Link to={`${process.env.REACT_APP_PATH}/gerenciar_links`}>
-              <Button
-                sx={{ color: theme.palette.text.secondary }}
-                variant="text"
-              >
-                Links de Pagamento
-              </Button>
-            </Link> */}
+                        <Button
+                          sx={{ color: theme.palette.text.secondary }}
+                          variant="text"
+                        >
+                          {item.label}
+                        </Button>
+                      </Link>
+                    ))}
                   </Box>
-                  <IconButton
-                    onClick={logoutUser}
-                    aria-label="delete"
-                    size="large"
-                  >
-                    <LogoutIcon fontSize="inherit" />
-                  </IconButton>
                 </Box>
+                <IconButton
+                  onClick={logoutUser}
+                  aria-label="delete"
+                  size="large"
+                >
+                  <LogoutIcon fontSize="inherit" />
+                </IconButton>
               </>
             ) : null}
           </Toolbar>

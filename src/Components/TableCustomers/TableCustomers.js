@@ -13,8 +13,15 @@ import {
   TextField,
   Checkbox,
   FormControlLabel,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,  
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import PaidIcon from '@mui/icons-material/Paid';
 import { useForm, Controller } from "react-hook-form";
 import swal from "sweetalert";
 
@@ -22,15 +29,19 @@ const TableCustomers = () => {
   const { rootState, fetchCustomers } = useContext(MyContext);
   const { customers } = rootState;
   const [open, setOpen] = useState(false);
+  const [openEditBilling, setOpenEditBilling] = useState(false);
   const [openLoading, setOpenLoading] = useState(false);
   const { handleSubmit, control, setValue } = useForm();
   const [cityName, setCityName] = useState("");
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+  const [selectedDataBilling, setSelectedDataBilling] = useState([]);
 
   const handleCloseLoading = () => setOpenLoading(false); 
   const handleOpenLoading = () => setOpenLoading(true);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const handleCloseEditBilling = () => setOpenEditBilling(false);
 
 
   const columns = [
@@ -71,9 +82,16 @@ const TableCustomers = () => {
       width: 150,
       disableClickEventBubbling: true,
       renderCell: (params) => (
-        <IconButton color="success" aria-label="delete" size="large">
-          <EditIcon onClick={() => handleClickRow(params.row)} />
-        </IconButton>
+        <Box>
+          <IconButton color="success" aria-label="delete" size="large">
+              <EditIcon onClick={() => handleClickRow(params.row)} />
+            </IconButton>
+            <IconButton color="warning" aria-label="delete" size="large">
+            <PaidIcon onClick={() => handleClickRowBillings(params.row.id)} />
+          </IconButton>
+        </Box>
+        
+
       ),
     },
   ];
@@ -95,6 +113,17 @@ const TableCustomers = () => {
       console.error(error);
     });
     setOpen(true);
+  };
+
+  const handleClickRowBillings = (customerId) => {
+    axios.post(`${process.env.REACT_APP_URL}/asaas.php?param=37`, { id: customerId })
+      .then((response) => {
+        setSelectedDataBilling(response.data.data);
+        console.log(selectedDataBilling);
+      })
+      
+    setSelectedCustomerId(customerId);
+    setOpenEditBilling(true);
   };
   
 
@@ -379,6 +408,83 @@ const TableCustomers = () => {
             </Box>
           </form>
         </Box>
+      </Modal>
+      <Modal
+        open={openEditBilling}
+        onClose={handleCloseEditBilling}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"        
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: { xs: "90%", sm: '90%', md: '90%', lg: '90%', xl: '80%' },
+            bgcolor: "background.paper",
+            border: "2px solid #000",
+            boxShadow: 24,
+            p: 4,
+            gap: "10px",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <h1>Cobranças</h1>
+          
+                 
+           
+                <TableContainer>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>ID</TableCell>
+                        <TableCell align="left">Tipo</TableCell>
+                        <TableCell align="left">Valor</TableCell>
+                        <TableCell align="left">Método</TableCell>
+                        <TableCell align="left">Status</TableCell>
+                        <TableCell align="left">Criação</TableCell>
+                        <TableCell align="left">Vencimento</TableCell>
+                        <TableCell align="left">Pagamento</TableCell>
+                        <TableCell align="left">Link</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                     {selectedDataBilling?.map((billing) => (    
+                        <TableRow
+                          key={billing.id}
+                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}                     
+                        >
+                          <TableCell component="th" scope="row">
+                            {billing.id}
+                          </TableCell>
+                          <TableCell align="left">{billing.paymentLink ? 'Link de Pagamento' : billing.subscription ? 'Doação recorrente' : 'Doação avulsa'}</TableCell>
+                          <TableCell align="left">{billing.value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</TableCell>
+                          <TableCell align="left">{billing.billingType}</TableCell>
+                          <TableCell align="left">{billing.status}</TableCell>
+                          <TableCell align="left">{(billing.dateCreated)?.split('-').reverse().join('/')}</TableCell>
+                          <TableCell align="left">{(billing.dueDate)?.split('-').reverse().join('/')}</TableCell>
+                          <TableCell align="left">{(billing.clientPaymentDate)?.split('-').reverse().join('/')}</TableCell>
+                          <TableCell align="left">{billing.invoiceUrl}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                {selectedDataBilling.some(item => "subscription" in item) && (
+                  <Button onClick={() => {
+                    const itemWithSubscription = selectedDataBilling.find(item => "subscription" in item);
+                    if (itemWithSubscription) {
+                      console.log(itemWithSubscription.subscription);
+                    }
+                  }}>
+                    Editar Assinatura
+                  </Button>
+                )}     
+                 
+        </Box>
+        
       </Modal>
       <Backdrop
         sx={{

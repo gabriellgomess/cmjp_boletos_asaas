@@ -22,6 +22,7 @@
     "react-apexcharts": "^1.4.1",
     "react-barcode": "^1.4.6",
     "react-dom": "^18.2.0",
+    "react-draggable": "^4.4.5",
     "react-dropzone": "^14.2.3",
     "react-excel-renderer": "^1.1.0",
     "react-hook-form": "^7.45.0-next.1",

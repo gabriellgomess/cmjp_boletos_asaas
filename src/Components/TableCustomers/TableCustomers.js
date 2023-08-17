@@ -18,12 +18,15 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,  
+  TableRow,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import PaidIcon from '@mui/icons-material/Paid';
+import PaidIcon from "@mui/icons-material/Paid";
 import { useForm, Controller } from "react-hook-form";
 import swal from "sweetalert";
+
+
+import DialogEditBilling from "./DialogEditBilling";
 
 const TableCustomers = () => {
   const { rootState, fetchCustomers } = useContext(MyContext);
@@ -35,14 +38,15 @@ const TableCustomers = () => {
   const [cityName, setCityName] = useState("");
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [selectedDataBilling, setSelectedDataBilling] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedSubscription, setSelectedSubscription] = useState(null);
 
-  const handleCloseLoading = () => setOpenLoading(false); 
+  const handleCloseLoading = () => setOpenLoading(false);
   const handleOpenLoading = () => setOpenLoading(true);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleCloseEditBilling = () => setOpenEditBilling(false);
-
 
   const columns = [
     {
@@ -74,7 +78,7 @@ const TableCustomers = () => {
       headerName: "E-mail",
       width: 200,
       // editable: true,
-    },    
+    },
     {
       field: "actions",
       headerName: "Editar",
@@ -84,51 +88,68 @@ const TableCustomers = () => {
       renderCell: (params) => (
         <Box>
           <IconButton color="success" aria-label="delete" size="large">
-              <EditIcon onClick={() => handleClickRow(params.row)} />
-            </IconButton>
-            <IconButton color="warning" aria-label="delete" size="large">
+            <EditIcon onClick={() => handleClickRow(params.row)} />
+          </IconButton>
+          <IconButton color="warning" aria-label="delete" size="large">
             <PaidIcon onClick={() => handleClickRowBillings(params.row.id)} />
           </IconButton>
         </Box>
-        
-
       ),
     },
   ];
 
   const handleClickRow = (customer) => {
-    axios.post(`${process.env.REACT_APP_URL}/asaas.php?param=30`, {code: customer.city})
-    .then((response) => {
-      console.log(response.data);
-      setCityName(response.data.name);
-  
-      // Mova a atualização dos valores do formulário para dentro do callback then, depois que o estado da cidade foi atualizado.
-      for (let key in customer) {
-        setValue(key, customer[key]);
-      }
-      setValue("notificationDisabled", customer.notificationDisabled);
-      setValue("city", response.data.name); // set city to the actual city name
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+    axios
+      .post(`${process.env.REACT_APP_URL}/asaas.php?param=30`, {
+        code: customer.city,
+      })
+      .then((response) => {
+        console.log(response.data);
+        setCityName(response.data.name);
+
+        // Mova a atualização dos valores do formulário para dentro do callback then, depois que o estado da cidade foi atualizado.
+        for (let key in customer) {
+          setValue(key, customer[key]);
+        }
+        setValue("notificationDisabled", customer.notificationDisabled);
+        setValue("city", response.data.name); // set city to the actual city name
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     setOpen(true);
   };
 
   const handleClickRowBillings = (customerId) => {
-    axios.post(`${process.env.REACT_APP_URL}/asaas.php?param=37`, { id: customerId })
+    axios
+      .post(`${process.env.REACT_APP_URL}/asaas.php?param=37`, {
+        id: customerId,
+      })
       .then((response) => {
         setSelectedDataBilling(response.data.data);
         console.log(selectedDataBilling);
-      })
-      
+      });
+
     setSelectedCustomerId(customerId);
     setOpenEditBilling(true);
   };
-  
+
+  const handleEditButtonClick = () => {
+    const itemWithSubscription = selectedDataBilling.find(
+      (item) => "subscription" in item
+    );
+    if (itemWithSubscription) {
+      setSelectedSubscription(itemWithSubscription.subscription);
+      setOpenDialog(true);
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedSubscription(null);
+  };
 
   const handleSave = handleSubmit((data) => {
-    
     axios
       .post(`${process.env.REACT_APP_URL}/asaas.php?param=2`, data)
       .then((response) => {
@@ -205,7 +226,7 @@ const TableCustomers = () => {
         >
           <form onSubmit={handleSave}>
             <Box
-              sx={{                
+              sx={{
                 bgcolor: "background.paper",
                 border: "2px solid #000",
                 boxShadow: 24,
@@ -396,7 +417,10 @@ const TableCustomers = () => {
                 render={({ field }) => (
                   <FormControlLabel
                     control={
-                      <Checkbox checked={field.value} onChange={e => field.onChange(e.target.checked)} />
+                      <Checkbox
+                        checked={field.value}
+                        onChange={(e) => field.onChange(e.target.checked)}
+                      />
                     }
                     label="Desativar notificações"
                   />
@@ -413,7 +437,7 @@ const TableCustomers = () => {
         open={openEditBilling}
         onClose={handleCloseEditBilling}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"        
+        aria-describedby="modal-modal-description"
       >
         <Box
           sx={{
@@ -421,7 +445,7 @@ const TableCustomers = () => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: { xs: "90%", sm: '90%', md: '90%', lg: '90%', xl: '80%' },
+            width: { xs: "90%", sm: "90%", md: "90%", lg: "90%", xl: "80%" },
             bgcolor: "background.paper",
             border: "2px solid #000",
             boxShadow: 24,
@@ -432,60 +456,76 @@ const TableCustomers = () => {
           }}
         >
           <h1>Cobranças</h1>
-          
-                 
-           
-                <TableContainer>
-                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>ID</TableCell>
-                        <TableCell align="left">Tipo</TableCell>
-                        <TableCell align="left">Valor</TableCell>
-                        <TableCell align="left">Método</TableCell>
-                        <TableCell align="left">Status</TableCell>
-                        <TableCell align="left">Criação</TableCell>
-                        <TableCell align="left">Vencimento</TableCell>
-                        <TableCell align="left">Pagamento</TableCell>
-                        <TableCell align="left">Link</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                     {selectedDataBilling?.map((billing) => (    
-                        <TableRow
-                          key={billing.id}
-                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}                     
-                        >
-                          <TableCell component="th" scope="row">
-                            {billing.id}
-                          </TableCell>
-                          <TableCell align="left">{billing.paymentLink ? 'Link de Pagamento' : billing.subscription ? 'Doação recorrente' : 'Doação avulsa'}</TableCell>
-                          <TableCell align="left">{billing.value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</TableCell>
-                          <TableCell align="left">{billing.billingType}</TableCell>
-                          <TableCell align="left">{billing.status}</TableCell>
-                          <TableCell align="left">{(billing.dateCreated)?.split('-').reverse().join('/')}</TableCell>
-                          <TableCell align="left">{(billing.dueDate)?.split('-').reverse().join('/')}</TableCell>
-                          <TableCell align="left">{(billing.clientPaymentDate)?.split('-').reverse().join('/')}</TableCell>
-                          <TableCell align="left">{billing.invoiceUrl}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                {selectedDataBilling.some(item => "subscription" in item) && (
-                  <Button onClick={() => {
-                    const itemWithSubscription = selectedDataBilling.find(item => "subscription" in item);
-                    if (itemWithSubscription) {
-                      console.log(itemWithSubscription.subscription);
-                    }
-                  }}>
-                    Editar Assinatura
-                  </Button>
-                )}     
-                 
+
+          <TableContainer>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell align="left">Tipo</TableCell>
+                  <TableCell align="left">Valor</TableCell>
+                  <TableCell align="left">Método</TableCell>
+                  <TableCell align="left">Status</TableCell>
+                  <TableCell align="left">Criação</TableCell>
+                  <TableCell align="left">Vencimento</TableCell>
+                  <TableCell align="left">Pagamento</TableCell>
+                  <TableCell align="left">Link</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {selectedDataBilling?.map((billing) => (
+                  <TableRow
+                    key={billing.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {billing.id}
+                    </TableCell>
+                    <TableCell align="left">
+                      {billing.paymentLink
+                        ? "Link de Pagamento"
+                        : billing.subscription
+                        ? "Doação recorrente"
+                        : "Doação avulsa"}
+                    </TableCell>
+                    <TableCell align="left">
+                      {billing.value.toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      })}
+                    </TableCell>
+                    <TableCell align="left">{billing.billingType}</TableCell>
+                    <TableCell align="left">{billing.status}</TableCell>
+                    <TableCell align="left">
+                      {billing.dateCreated?.split("-").reverse().join("/")}
+                    </TableCell>
+                    <TableCell align="left">
+                      {billing.dueDate?.split("-").reverse().join("/")}
+                    </TableCell>
+                    <TableCell align="left">
+                      {billing.clientPaymentDate
+                        ?.split("-")
+                        .reverse()
+                        .join("/")}
+                    </TableCell>
+                    <TableCell align="left">{billing.invoiceUrl}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          {selectedDataBilling.some((item) => "subscription" in item) && (
+            <Button onClick={handleEditButtonClick}>
+              Editar Doação Recorrente
+            </Button>
+          )}
         </Box>
-        
       </Modal>
+      <DialogEditBilling
+        open={openDialog}
+        subscription={selectedSubscription}
+        onClose={handleCloseDialog}
+      />
       <Backdrop
         sx={{
           color: "#fff",

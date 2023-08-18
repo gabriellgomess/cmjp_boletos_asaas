@@ -22,6 +22,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import PaidIcon from "@mui/icons-material/Paid";
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import { useForm, Controller } from "react-hook-form";
 import swal from "sweetalert";
 
@@ -40,6 +41,7 @@ const TableCustomers = () => {
   const [selectedDataBilling, setSelectedDataBilling] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedSubscription, setSelectedSubscription] = useState(null);
+
 
   const handleCloseLoading = () => setOpenLoading(false);
   const handleOpenLoading = () => setOpenLoading(true);
@@ -81,7 +83,7 @@ const TableCustomers = () => {
     },
     {
       field: "actions",
-      headerName: "Editar",
+      headerName: "Ações",
       sortable: false,
       width: 150,
       disableClickEventBubbling: true,
@@ -92,6 +94,9 @@ const TableCustomers = () => {
           </IconButton>
           <IconButton color="warning" aria-label="delete" size="large">
             <PaidIcon onClick={() => handleClickRowBillings(params.row.id)} />
+          </IconButton>
+          <IconButton color="error" aria-label="delete" size="large">
+            <PersonRemoveIcon onClick={() => handleDeleteCustomer(params.row.id)} />
           </IconButton>
         </Box>
       ),
@@ -118,6 +123,61 @@ const TableCustomers = () => {
         console.error(error);
       });
     setOpen(true);
+  };
+
+  const handleDeleteCustomer = (customerId) => {
+    swal({
+      title: "Você tem certeza?",
+      text: "Uma vez deletado, você não poderá recuperar este registro!",
+      icon: "warning",
+      buttons: ["Cancelar", "Deletar"],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        axios
+          .post(`${process.env.REACT_APP_URL}/asaas.php?param=6`, {
+            id: customerId,
+          })
+          .then((response) => {
+            if (response.data.success) {
+              swal({
+                icon: "success",
+                title: response.data.success,
+                buttons: {
+                  confirm: {
+                    text: "OK",
+                    value: true,
+                    visible: true,
+                    className: "",
+                    closeModal: true,
+                  },
+                },
+              }).then((value) => {
+                if (value) {
+                  window.location.reload();
+                }
+              });
+            } else {
+              swal({
+                icon: "error",
+                title: response.data.error,
+                buttons: {
+                  confirm: {
+                    text: "OK",
+                    value: true,
+                    visible: true,
+                    className: "",
+                    closeModal: true,
+                  },
+                },
+              });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    });
   };
 
   const handleClickRowBillings = (customerId) => {

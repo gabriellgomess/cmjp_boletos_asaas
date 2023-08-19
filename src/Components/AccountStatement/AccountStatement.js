@@ -42,6 +42,7 @@ function AccountStatement() {
     const loadMore = () => {
         if (!loading && hasMore) {
             setCurrentPage(prevPage => prevPage + 1);
+            console.log(currentPage)
         }
     }
 

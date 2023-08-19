@@ -13,6 +13,7 @@ import axios from "axios";
 import Select from "@mui/material/Select";
 import { MenuItem, FormControl, InputLabel, IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import swal from "sweetalert";
 
 function PaperComponent(props) {
   return (
@@ -82,6 +83,12 @@ export default function DraggableDialog(props) {
       .post(`${process.env.REACT_APP_URL}/asaas.php?param=22`, formData)
       .then((response) => {
         console.log(response.data);
+        if (response.data.status === 'success') {
+          swal("Sucesso!", response.data.message, "success");
+          onClose();
+        }else{
+          swal("Erro!", response.data.message, "error");
+        }
         
       })
       .catch((error) => {
@@ -90,17 +97,33 @@ export default function DraggableDialog(props) {
   };
 
   const handleDelete = () => {
-    // Send edited data to the backend using axios.post
-    alert("ID: ", formData.id);
-    axios
+    swal({
+      title: "Tem certeza?",
+      text: "Uma vez excluído, você não poderá recuperar esta cobrança!",
+      icon: "warning",
+      buttons: ["Cancelar", "Excluir"],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        axios
       .post(`${process.env.REACT_APP_URL}/asaas.php?param=23`, {id: formData.id})
       .then((response) => {
         console.log(response.data);
+        if (response.data.status === 'success') {
+          swal("Sucesso!", response.data.message, "success");
+        }else{
+          swal("Erro!", response.data.message, "error");
+        }       
         onClose(); // Close the dialog after successful update
       })
       .catch((error) => {
         console.log(error);
       });
+      } else {
+        swal("Exclusão cancelada!");
+      }       
+    });
+    
   };
 
   return (
@@ -138,6 +161,7 @@ export default function DraggableDialog(props) {
               }}
             >
               <TextField
+              InputLabelProps={{ shrink: true }}
                 sx={{ width: { xs: "100%", sm: "100%", md: "48%" } }}
                 label="ID da cobrança"
                 name="id"
@@ -147,6 +171,7 @@ export default function DraggableDialog(props) {
                 disabled
               />
               <TextField
+              InputLabelProps={{ shrink: true }}
                 sx={{ width: { xs: "100%", sm: "100%", md: "48%" } }}
                 label="Data de criação"
                 name="dateCreated"
@@ -157,6 +182,7 @@ export default function DraggableDialog(props) {
                 disabled
               />
               <TextField
+              InputLabelProps={{ shrink: true }}
                 sx={{ width: { xs: "100%", sm: "100%", md: "48%" } }}
                 label="Cliente"
                 name="customer"
@@ -210,6 +236,7 @@ export default function DraggableDialog(props) {
                 </Select>
               </FormControl>
               <TextField
+              InputLabelProps={{ shrink: true }}
                 sx={{ width: { xs: "100%", sm: "100%", md: "48%" } }}
                 label="Valor"
                 name="value"
@@ -218,6 +245,7 @@ export default function DraggableDialog(props) {
                 onChange={handleInputChange}
               />
               <TextField
+              InputLabelProps={{ shrink: true }}
                 sx={{ width: { xs: "100%", sm: "100%", md: "48%" } }}
                 label="Próximo vencimento"
                 name="nextDueDate"
@@ -227,6 +255,7 @@ export default function DraggableDialog(props) {
                 onChange={handleInputChange}
               />
               <TextField
+              InputLabelProps={{ shrink: true }}
                 sx={{ width: { xs: "100%", sm: "100%", md: "48%" } }}
                 label="Descrição"
                 name="description"
@@ -235,6 +264,7 @@ export default function DraggableDialog(props) {
                 onChange={handleInputChange}
               />
               <TextField
+              InputLabelProps={{ shrink: true }}
                 sx={{ width: { xs: "100%", sm: "100%", md: "48%" } }}
                 label="Status"
                 name="status"

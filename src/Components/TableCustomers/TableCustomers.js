@@ -23,6 +23,8 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import PaidIcon from "@mui/icons-material/Paid";
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import { useForm, Controller } from "react-hook-form";
 import swal from "sweetalert";
 
@@ -251,6 +253,14 @@ const TableCustomers = () => {
         console.error(error);
       });
   });
+
+  const handleEditaDoacaoAvulsa = (billing) => {
+    console.log(billing)
+  }
+
+  const handleDeletaDoacaoAvulsa = (billingId) => {
+    console.log(billingId)
+  }
 
   return (
     <Box
@@ -530,6 +540,7 @@ const TableCustomers = () => {
                   <TableCell align="left">Vencimento</TableCell>
                   <TableCell align="left">Pagamento</TableCell>
                   <TableCell align="left">Link</TableCell>
+                  <TableCell align="center">Ação</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -554,7 +565,7 @@ const TableCustomers = () => {
                         currency: "BRL",
                       })}
                     </TableCell>
-                    <TableCell align="left">{billing.billingType}</TableCell>
+                    <TableCell align="left">{billing.billingType == 'UNDEFINED'?'Doador escolhe':billing.billingType}</TableCell>
                     <TableCell align="left">{billing.status}</TableCell>
                     <TableCell align="left">
                       {billing.dateCreated?.split("-").reverse().join("/")}
@@ -569,6 +580,14 @@ const TableCustomers = () => {
                         .join("/")}
                     </TableCell>
                     <TableCell align="left">{billing.invoiceUrl}</TableCell>
+                    <TableCell align="left">
+                    <IconButton onClick={()=>handleEditaDoacaoAvulsa(billing)} color='success' aria-label="edit">
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={()=>handleDeletaDoacaoAvulsa(billing.id)} color='error' aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

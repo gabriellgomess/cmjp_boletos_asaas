@@ -51,30 +51,38 @@ function Header() {
     <>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar
-          sx={{ background: theme.palette.background.header }}
+          sx={{ background: theme.palette.background.header}}
           position="static"
         >
           <Container maxWidth="xl">
-            <Toolbar disableGutters>
+          <Toolbar disableGutters>
               <Box
                 sx={{
                   display: { xs: "none", md: "flex" },
                   justifyContent: "space-between",
+                  alignItems: "center",
                   padding: 3,
                   mr: 1,
                   width: "100%",
+                  height: {xs: '', sm: '', md: 80, lg: 80, xl: 120}
                 }}
               >
-                <img
-                  height={90}
-                  src={Logo}
-                  alt="Logo Casa do Menino Jesus de Praga"
-                />
-                <img
-                  width={120}
-                  src={LogoLG}
-                  alt="Logo Casa do Menino Jesus de Praga"
-                />
+                <Box sx={{height: {xs:40, sm: 40, md:50, lg: 60}}}>
+                  <img
+                    height='100%'
+                    src={Logo}
+                    alt="Logo Casa do Menino Jesus de Praga"
+                  />
+                </Box>
+                <Box sx={{height: {xs:40, sm: 40, md:50, lg: 60}}}>
+                   <img
+                      height='100%'
+                      src={LogoLG}
+                      alt="Logo Casa do Menino Jesus de Praga"
+                    />
+                </Box>
+                
+               
               </Box>
               <Box sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>
                 <img
@@ -87,9 +95,9 @@ function Header() {
           </Container>
         </AppBar>
       </Box>
-      <AppBar position="static">
-        <Container maxWidth="xl">
-          <Toolbar disableGutters>
+      <AppBar position="static" sx={{ height: {xs: '', sm: '', md: 40, lg: 50, xl: 60} }}>
+        <Container maxWidth="xl" sx={{height: '100%', display: 'flex', alignItems: 'center'}}>
+          <Toolbar disableGutters sx={{ minHeight: '30px !important', display: 'flex' }}>
             {isAuth ? (
               <>
                 <Box
@@ -100,7 +108,7 @@ function Header() {
                   }}
                 >
                   <IconButton
-                    size="large"
+                    size="small"
                     aria-label="account of current user"
                     aria-controls="menu-appbar"
                     aria-haspopup="true"
@@ -133,6 +141,7 @@ function Header() {
                           <Button
                             sx={{ color: theme.palette.text.primary }}
                             variant="text"
+                            size="small"
                           >
                             {item.label}
                           </Button>
@@ -146,7 +155,8 @@ function Header() {
                     flexGrow: 1,
                     display: { xs: "none", md: "flex" },
                     alignItems: "center",
-                    justifyContent: "space-between",
+                    justifyContent: "space-between"
+                                        
                   }}
                 >
                   <Box>
@@ -158,6 +168,7 @@ function Header() {
                         <Button
                           sx={{ color: theme.palette.text.secondary }}
                           variant="text"
+                          size="small"
                         >
                           {item.label}
                         </Button>
@@ -168,7 +179,7 @@ function Header() {
                 <IconButton
                   onClick={logoutUser}
                   aria-label="delete"
-                  size="large"
+                  size="small"
                 >
                   <LogoutIcon fontSize="inherit" />
                 </IconButton>

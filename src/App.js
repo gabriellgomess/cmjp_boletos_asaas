@@ -27,6 +27,7 @@ import BillingManager from "./Pages/BillingManager";
 import CustomerManager from "./Pages/CustomerManager";
 import PageBillings from "./Pages/PageBillings";
 import PageLinks from "./Pages/PageLinks";
+import DebitoConta from "./Pages/DebitoConta";
 
 // Componentes
 import Header from "./Components/Header/Header";
@@ -203,6 +204,14 @@ const App = () => {
                 element={
                   <WithAuthentication>
                     <PageLinks />
+                  </WithAuthentication>
+                }
+              />
+                            <Route
+                path={`${process.env.REACT_APP_PATH}/debito_conta`}
+                element={
+                  <WithAuthentication>
+                    <DebitoConta />
                   </WithAuthentication>
                 }
               />

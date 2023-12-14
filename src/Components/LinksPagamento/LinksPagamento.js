@@ -202,27 +202,28 @@ const LinksPagamento = () => {
 
   const handleDelete = (id) => {
     // chamar a API para deletar a linha baseado no id
-    axios.post(`${process.env.REACT_APP_URL}/asaas.php?param=33&id=${id}`)
-    .then((response) => {
-      console.log(response.data);
-      swal({
-        icon: "success",
-        title: "Doador excluído!",
-        buttons: {
-          confirm: {
-            text: "OK",
-            value: true,
-            visible: true,
-            className: "",
-            closeModal: true,
+    axios
+      .post(`${process.env.REACT_APP_URL}/asaas.php?param=33&id=${id}`)
+      .then((response) => {
+        console.log(response.data);
+        swal({
+          icon: "success",
+          title: "Doador excluído!",
+          buttons: {
+            confirm: {
+              text: "OK",
+              value: true,
+              visible: true,
+              className: "",
+              closeModal: true,
+            },
           },
-        },
-      }).then((value) => {
-        if (value) {
-          setReload(!reload);
-        }
+        }).then((value) => {
+          if (value) {
+            setReload(!reload);
+          }
+        });
       });
-    })    
   };
 
   useEffect(() => {
@@ -633,12 +634,10 @@ const LinksPagamento = () => {
                       handleClose();
                     }
                   });
-                  
                 })
                 .catch((error) => {
                   console.error(error);
                 });
-              
             }}
           >
             Salvar

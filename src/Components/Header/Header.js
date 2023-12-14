@@ -27,6 +27,7 @@ const menuItems = [
   { path: "/form_cadastro", label: "Cadastrar Doador" },
   { path: "/gerar_cobranca", label: "Gerar Doação" },
   { path: "/links_pagamento", label: "Links de Pagamento" },
+  { path: "/debito_conta", label: "Débito em Conta" },
   { path: "/gerenciar_doadores", label: "Gerenciar Doadores" },
   { path: "/doacoes", label: "Doações" },
   { path: "/extrato", label: "Extrato da conta" },

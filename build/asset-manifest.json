@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/gerenciador-doacoes-amigosdacasa/static/css/main.1aa1b982.css",
+    "main.js": "/gerenciador-doacoes-amigosdacasa/static/js/main.7073c19a.js",
+    "static/js/787.044ba211.chunk.js": "/gerenciador-doacoes-amigosdacasa/static/js/787.044ba211.chunk.js",
+    "static/media/woman.png": "/gerenciador-doacoes-amigosdacasa/static/media/woman.48c9fb238b36ad537304.png",
+    "static/media/LogoNexusTech.png": "/gerenciador-doacoes-amigosdacasa/static/media/LogoNexusTech.8bc3d3f6936e0a237601.png",
+    "static/media/logotipo_amc.png": "/gerenciador-doacoes-amigosdacasa/static/media/logotipo_amc.35f2550552f9ebd9e36a.png",
+    "static/media/logotipo_amc_lg.png": "/gerenciador-doacoes-amigosdacasa/static/media/logotipo_amc_lg.e7325eb62ea890fa9ae0.png",
+    "static/media/logo_horizontal_cmjp.png": "/gerenciador-doacoes-amigosdacasa/static/media/logo_horizontal_cmjp.67c34548d61e4f8d8cf8.png",
+    "index.html": "/gerenciador-doacoes-amigosdacasa/index.html",
+    "main.1aa1b982.css.map": "/gerenciador-doacoes-amigosdacasa/static/css/main.1aa1b982.css.map",
+    "main.7073c19a.js.map": "/gerenciador-doacoes-amigosdacasa/static/js/main.7073c19a.js.map",
+    "787.044ba211.chunk.js.map": "/gerenciador-doacoes-amigosdacasa/static/js/787.044ba211.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1aa1b982.css",
+    "static/js/main.7073c19a.js"
+  ]
+}

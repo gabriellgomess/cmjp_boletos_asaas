@@ -31,6 +31,7 @@ const menuItems = [
   { path: "/gerenciar_doadores", label: "Gerenciar Doadores" },
   { path: "/doacoes", label: "Doações" },
   { path: "/extrato", label: "Extrato da conta" },
+  { path: "/doacoes-site", label: "Doações Site" },
 ];
 
 function Header() {

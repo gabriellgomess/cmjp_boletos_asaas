@@ -28,6 +28,7 @@ import CustomerManager from "./Pages/CustomerManager";
 import PageBillings from "./Pages/PageBillings";
 import PageLinks from "./Pages/PageLinks";
 import DebitoConta from "./Pages/DebitoConta";
+import DoacoesSite from "./Pages/DoacoesSite";
 
 // Componentes
 import Header from "./Components/Header/Header";
@@ -268,6 +269,14 @@ const App = () => {
                 element={                  
                   <WithAuthentication>
                     <ExtratoConta />
+                  </WithAuthentication>
+                }
+              />
+              <Route
+                path={`${process.env.REACT_APP_PATH}/doacoes-site`}
+                element={
+                  <WithAuthentication>
+                    <DoacoesSite />
                   </WithAuthentication>
                 }
               />
